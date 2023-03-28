@@ -24,29 +24,31 @@ import log.Logger;
  * Что требуется сделать:
  * 1. Метод создания меню перегружен функционалом и трудно читается.
  * Следует разделить его на серию более простых методов (или вообще выделить отдельный класс).
+ *
  */
-public class MainApplicationFrame extends JFrame {
-    private final JDesktopPane desktopPane = new JDesktopPane();
+public class MainApplicationFrame extends JFrame
+{
+  private final JDesktopPane desktopPane = new JDesktopPane();
 
-    public MainApplicationFrame() {
-        //Make the big window be indented 50 pixels from each edge
-        //of the screen.
-        int inset = 50;
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        setBounds(inset, inset,
-                screenSize.width - inset * 2,
-                screenSize.height - inset * 2);
+  public MainApplicationFrame() {
+    //Make the big window be indented 50 pixels from each edge
+    //of the screen.
+    int inset = 50;
+    Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+    setBounds(inset, inset,
+        screenSize.width  - inset*2,
+        screenSize.height - inset*2);
 
-        setContentPane(desktopPane);
+    setContentPane(desktopPane);
 
         localizing();
 
-        LogWindow logWindow = createLogWindow();
-        addWindow(logWindow);
+    LogWindow logWindow = createLogWindow();
+    addWindow(logWindow);
 
-        GameWindow gameWindow = new GameWindow();
-        gameWindow.setSize(400, 400);
-        addWindow(gameWindow);
+    GameWindow gameWindow = new GameWindow();
+    gameWindow.setSize(400,  400);
+    addWindow(gameWindow);
 
         addWindowListener(new WindowAdapter() {
             @Override
@@ -58,27 +60,30 @@ public class MainApplicationFrame extends JFrame {
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
     }
 
-    private void localizing() {
+    private void localizing()
+    {
         UIManager.put("OptionPane.yesButtonText", "Да");
         UIManager.put("OptionPane.noButtonText", "Нет");
         UIManager.put("OptionPane.cancelButtonText", "Отмена");
         UIManager.put("OptionPane.okButtonText", "Готово");
     }
 
-    protected LogWindow createLogWindow() {
-        LogWindow logWindow = new LogWindow(Logger.getDefaultLogSource());
-        logWindow.setLocation(10, 10);
-        logWindow.setSize(300, 800);
-        setMinimumSize(logWindow.getSize());
-        logWindow.pack();
-        Logger.debug("Протокол работает");
-        return logWindow;
-    }
+  protected LogWindow createLogWindow()
+  {
+    LogWindow logWindow = new LogWindow(Logger.getDefaultLogSource());
+    logWindow.setLocation(10,10);
+    logWindow.setSize(300, 800);
+    setMinimumSize(logWindow.getSize());
+    logWindow.pack();
+    Logger.debug("Протокол работает");
+    return logWindow;
+  }
 
-    protected void addWindow(JInternalFrame frame) {
-        desktopPane.add(frame);
-        frame.setVisible(true);
-    }
+  protected void addWindow(JInternalFrame frame)
+  {
+    desktopPane.add(frame);
+    frame.setVisible(true);
+  }
 
 //    protected JMenuBar createMenuBar() {
 //        JMenuBar menuBar = new JMenuBar();
@@ -109,17 +114,34 @@ public class MainApplicationFrame extends JFrame {
 //        return menuBar;
 //    }
 
-    private JMenuBar generateMenuBar() {
+    private JMenuBar generateMenuBar()
+    {
         JMenuBar menuBar = new JMenuBar();
-        MenuGenerator menuGenerator = new MenuGenerator();
 
-        menuBar.add(menuGenerator.createLookAndViewMenu());
-        menuBar.add(menuGenerator.createTestMenu());
-        menuBar.add(menuGenerator.createExitMenu());
+        MenuBuilder menuBuilder = new MenuBuilder();
+
+        menuBar.add(menuBuilder.createLookAndViewMenu());
+        menuBar.add(menuBuilder.createTestMenu());
+        menuBar.add(menuBuilder.createExitMenu());
         return menuBar;
     }
 
-    private void closeProgram() {
+    private void setLookAndFeel(String className)
+    {
+        try
+        {
+            UIManager.setLookAndFeel(className);
+            SwingUtilities.updateComponentTreeUI(this);
+        }
+        catch (ClassNotFoundException | InstantiationException
+               | IllegalAccessException | UnsupportedLookAndFeelException e)
+        {
+            // just ignore
+        }
+    }
+
+    private void closeProgram()
+    {
         // Пользователь ничего не выбрал и вышел через закрытие окна
         switch (JOptionPane.showConfirmDialog(
                 this,
@@ -138,27 +160,20 @@ public class MainApplicationFrame extends JFrame {
         }
     }
 
-    private void setLookAndFeel(String className) {
-        try {
-            UIManager.setLookAndFeel(className);
-            SwingUtilities.updateComponentTreeUI(this);
-        } catch (ClassNotFoundException | InstantiationException
-                 | IllegalAccessException | UnsupportedLookAndFeelException e) {
-            // just ignore
-        }
-    }
+    private class MenuBuilder {
 
-    private class MenuGenerator {
-
-        private MenuGenerator() {
+        private MenuBuilder() {
 
         }
 
-        private void closeProgram(ActionEvent a) {
+        // Переименовать.
+        private void closeProgram(ActionEvent a)
+        {
             MainApplicationFrame.this.closeProgram();
         }
 
-        private JMenu createExitMenu() {
+        private JMenu createExitMenu()
+        {
             JMenu closeMenu = new JMenu("Закрытие");
             closeMenu.setMnemonic(KeyEvent.VK_ESCAPE);
             closeMenu.getAccessibleContext().setAccessibleDescription(
@@ -173,7 +188,8 @@ public class MainApplicationFrame extends JFrame {
             return closeMenu;
         }
 
-        private JMenu createTestMenu() {
+        private JMenu createTestMenu()
+        {
             JMenu testMenu = new JMenu("Тесты");
             testMenu.setMnemonic(KeyEvent.VK_T);
             testMenu.getAccessibleContext().setAccessibleDescription(
@@ -189,7 +205,8 @@ public class MainApplicationFrame extends JFrame {
             return testMenu;
         }
 
-        private JMenu createLookAndViewMenu() {
+        private JMenu createLookAndViewMenu()
+        {
             JMenu lookAndFeelMenu = new JMenu("Режим отображения");
             lookAndFeelMenu.setMnemonic(KeyEvent.VK_V);
             lookAndFeelMenu.getAccessibleContext().setAccessibleDescription(

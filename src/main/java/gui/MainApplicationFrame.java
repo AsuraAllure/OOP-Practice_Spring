@@ -1,22 +1,9 @@
 package gui;
 
-import java.awt.Dimension;
-import java.awt.Toolkit;
-import java.awt.event.ActionEvent;
-import java.awt.event.KeyEvent;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
+import java.awt.*;
+import java.awt.event.*;
 
-import javax.swing.JDesktopPane;
-import javax.swing.JFrame;
-import javax.swing.JInternalFrame;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
-import javax.swing.SwingUtilities;
-import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
+import javax.swing.*;
 
 import log.Logger;
 
@@ -29,6 +16,8 @@ import log.Logger;
 public class MainApplicationFrame extends JFrame
 {
   private final JDesktopPane desktopPane = new JDesktopPane();
+  private LogWindow logWindow;
+  private GameWindow gameWindow;
 
   public MainApplicationFrame() {
     //Make the big window be indented 50 pixels from each edge
@@ -41,21 +30,24 @@ public class MainApplicationFrame extends JFrame
 
     setContentPane(desktopPane);
 
-        localizing();
+    localizing();
 
-    LogWindow logWindow = createLogWindow();
+
+    logWindow = createLogWindow();
     addWindow(logWindow);
 
-    GameWindow gameWindow = new GameWindow();
+
+    gameWindow = new GameWindow();
     gameWindow.setSize(400,  400);
     addWindow(gameWindow);
 
-        addWindowListener(new WindowAdapter() {
-            @Override
-            public void windowClosing(WindowEvent e) {
+
+    addWindowListener(new WindowAdapter() {
+    @Override
+    public void windowClosing(WindowEvent e) {
                 closeProgram();
-            }
-        });
+        }
+    });
         setJMenuBar(generateMenuBar());
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
     }
@@ -155,7 +147,8 @@ public class MainApplicationFrame extends JFrame
             case JOptionPane.YES_OPTION -> {
                 Logger.debug("Yes exit");
                 dispose();
-                System.exit(0);
+                Frame[] frames = getFrames();
+                System.out.print("asd");
             }
         }
     }
@@ -166,23 +159,18 @@ public class MainApplicationFrame extends JFrame
 
         }
 
-        // Переименовать.
-        private void closeProgram(ActionEvent a)
-        {
-            MainApplicationFrame.this.closeProgram();
-        }
-
         private JMenu createExitMenu()
         {
             JMenu closeMenu = new JMenu("Закрытие");
-            closeMenu.setMnemonic(KeyEvent.VK_ESCAPE);
             closeMenu.getAccessibleContext().setAccessibleDescription(
                     "Закрыть"
             );
 
             {
-                JMenuItem closeItem = new JMenuItem("Закрыть", KeyEvent.VK_F4);
-                closeItem.addActionListener(this::closeProgram);
+                JMenuItem closeItem = new JMenuItem("Закрыть", KeyEvent.VK_X);
+                closeItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_X, ActionEvent.SHIFT_MASK));
+
+                closeItem.addActionListener(actionEvent -> closeProgram());
                 closeMenu.add(closeItem);
             }
             return closeMenu;
@@ -191,12 +179,12 @@ public class MainApplicationFrame extends JFrame
         private JMenu createTestMenu()
         {
             JMenu testMenu = new JMenu("Тесты");
-            testMenu.setMnemonic(KeyEvent.VK_T);
             testMenu.getAccessibleContext().setAccessibleDescription(
                     "Тестовые команды");
 
             {
-                JMenuItem addLogMessageItem = new JMenuItem("Сообщение в лог", KeyEvent.VK_S);
+                JMenuItem addLogMessageItem = new JMenuItem("Сообщение в лог", KeyEvent.VK_T);
+                addLogMessageItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_T, ActionEvent.SHIFT_MASK));
                 addLogMessageItem.addActionListener((event) ->
                         Logger.debug("Новая строка")
                 );
@@ -208,7 +196,6 @@ public class MainApplicationFrame extends JFrame
         private JMenu createLookAndViewMenu()
         {
             JMenu lookAndFeelMenu = new JMenu("Режим отображения");
-            lookAndFeelMenu.setMnemonic(KeyEvent.VK_V);
             lookAndFeelMenu.getAccessibleContext().setAccessibleDescription(
                     "Управление режимом отображения приложения");
 
@@ -223,7 +210,7 @@ public class MainApplicationFrame extends JFrame
             }
 
             {
-                JMenuItem crossplatformLookAndFeel = new JMenuItem("Универсальная схема", KeyEvent.VK_S);
+                JMenuItem crossplatformLookAndFeel = new JMenuItem("Универсальная схема", KeyEvent.VK_U);
                 crossplatformLookAndFeel.addActionListener((event) -> {
                     MainApplicationFrame.this.setLookAndFeel(
                             UIManager.getCrossPlatformLookAndFeelClassName());

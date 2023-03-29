@@ -16,11 +16,7 @@ import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
 
-
 import log.Logger;
-
-
-
 
 /**
  * Что требуется сделать:
@@ -61,7 +57,7 @@ public class MainApplicationFrame extends JFrame
     });
 
     setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
-    }
+  }
 
   protected LogWindow createLogWindow()
   {
@@ -109,29 +105,29 @@ public class MainApplicationFrame extends JFrame
 //        return menuBar;
 //    }
 
-    private JMenuBar generateMenuBar()
-    {
-        JMenuBar menuBar = new JMenuBar();
-        MenuBuilder menuBuilder = new MenuBuilder();
-        menuBar.add(menuBuilder.createLookAndViewMenu());
-        menuBar.add(menuBuilder.createTestMenu());
-        menuBar.add(menuBuilder.createExitMenu());
-        return menuBar;
-    }
+  private JMenuBar generateMenuBar()
+  {
+    JMenuBar menuBar = new JMenuBar();
+    MenuBuilder menuBuilder = new MenuBuilder();
+    menuBar.add(menuBuilder.createLookAndViewMenu());
+    menuBar.add(menuBuilder.createTestMenu());
+    menuBar.add(menuBuilder.createExitMenu());
+    return menuBar;
+  }
 
-    private void setLookAndFeel(String className)
+  private void setLookAndFeel(String className)
+  {
+    try
     {
-        try
-        {
-            UIManager.setLookAndFeel(className);
-            SwingUtilities.updateComponentTreeUI(this);
-        }
-        catch (ClassNotFoundException | InstantiationException
-               | IllegalAccessException | UnsupportedLookAndFeelException e)
-        {
-            // just ignore
-        }
+      UIManager.setLookAndFeel(className);
+      SwingUtilities.updateComponentTreeUI(this);
     }
+    catch (ClassNotFoundException | InstantiationException
+           | IllegalAccessException | UnsupportedLookAndFeelException e)
+    {
+      // just ignore
+    }
+  }
 
     private void closeProgram()
     {

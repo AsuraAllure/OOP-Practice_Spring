@@ -1,18 +1,19 @@
 Задача: при нажатии на соответственные опции в меню будет произведена операция,
 определенная в testMenu.
+Все значение value - определены в файле resources/localData...
 
 Тест 1:
-    При нажатии из меню "Закрытие" опции "Закрыть" будет
+    При нажатии из меню "closeMenuName" опции "closeMenuItemName" будет
         выполнена операция CloseOperation.
 
 Тест 2:
-    При нажатии из меню "Тесты" опции "Сообщение в лог" будет
+    При нажатии из меню "testMenuName" опции "logMessageMenuItemName" будет
     выполнена операция TestLogOperation.
 
 Тест 3:
-    При нажатии из меню "Режим отображения" опции "Системная схема" будет
-    выполнена операция SetSystemLookAndFeel.
+    При нажатии из меню "lookAndFeelMenuName" опции "systemLookAndFeelMenuItemName"
+    будет выполнена операция SetSystemLookAndFeel.
 
 Тест 4:
-    При нажатии из меню "Режим отображения" опции "Универсальная схема" будет
-    выполнена операция SetUniversalLookAndFeel.
+    При нажатии из меню "lookAndFeelMenuName" опции "universalLookAndFeelMenuItemName"
+    будет выполнена операция SetUniversalLookAndFeel.

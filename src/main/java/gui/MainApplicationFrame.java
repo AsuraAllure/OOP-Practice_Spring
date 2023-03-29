@@ -109,7 +109,6 @@ public class MainApplicationFrame extends JFrame
 //        return menuBar;
 //    }
 
-    // Проблема с выходом возникает здесь!!!!!!!!
     private JMenuBar generateMenuBar()
     {
         JMenuBar menuBar = new JMenuBar();
@@ -149,7 +148,6 @@ public class MainApplicationFrame extends JFrame
             case JOptionPane.YES_OPTION -> {
                 Logger.debug(localizator.getString("yesExitLogMessage"));
                 setDefaultCloseOperation(EXIT_ON_CLOSE);
-
                 dispose();
             }
         }
@@ -172,9 +170,7 @@ public class MainApplicationFrame extends JFrame
                 JMenuItem closeItem = new JMenuItem(localizator.getString("closeMenuItemName"));
                 closeItem.setMnemonic(KeyEvent.VK_X);
                 closeItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_X, ActionEvent.SHIFT_MASK));
-
-                // z
-                closeItem.addActionListener(actionEvent -> closeProgram());
+                closeItem.addActionListener(actionEvent -> dispatchEvent(new WindowEvent(MainApplicationFrame.this, WindowEvent.WINDOW_CLOSING)));
 
                 closeMenu.add(closeItem);
             }

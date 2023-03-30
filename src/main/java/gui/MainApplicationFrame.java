@@ -2,7 +2,10 @@ package gui;
 
 import java.awt.Dimension;
 import java.awt.Toolkit;
-import java.awt.event.*;
+import java.awt.event.KeyEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.awt.event.ActionEvent;
 
 import javax.swing.JDesktopPane;
 import javax.swing.JFrame;
@@ -27,7 +30,7 @@ import log.Logger;
 public class MainApplicationFrame extends JFrame
 {
   private final JDesktopPane desktopPane = new JDesktopPane();
-  private Localizer localizator = new Localizer(UIManager.getDefaults().getDefaultLocale());
+  private final Localizer localizator = new Localizer(UIManager.getDefaults().getDefaultLocale());
   public MainApplicationFrame() {
     //Make the big window be indented 50 pixels from each edge
     //of the screen.

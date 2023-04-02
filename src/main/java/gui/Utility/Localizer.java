@@ -1,4 +1,4 @@
-package gui;
+package gui.Utility;
 
 import javax.swing.UIManager;
 import java.util.Locale;

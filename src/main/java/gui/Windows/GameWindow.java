@@ -1,4 +1,6 @@
-package gui;
+package gui.Windows;
+
+import gui.Utility.GameVisualizer;
 
 import java.awt.BorderLayout;
 

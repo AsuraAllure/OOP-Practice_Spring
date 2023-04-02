@@ -1,4 +1,4 @@
-package gui;
+package gui.Utility;
 
 import java.awt.Color;
 import java.awt.EventQueue;

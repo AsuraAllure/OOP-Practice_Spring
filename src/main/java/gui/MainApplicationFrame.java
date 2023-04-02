@@ -19,6 +19,9 @@ import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
 
+import gui.Utility.Localizer;
+import gui.Windows.GameWindow;
+import gui.Windows.LogWindow;
 import log.Logger;
 
 public class MainApplicationFrame extends JFrame

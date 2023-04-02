@@ -21,19 +21,11 @@ import javax.swing.KeyStroke;
 
 import log.Logger;
 
-/**
- * Что требуется сделать:
- * 1. Метод создания меню перегружен функционалом и трудно читается.
- * Следует разделить его на серию более простых методов (или вообще выделить отдельный класс).
- *
- */
 public class MainApplicationFrame extends JFrame
 {
   private final JDesktopPane desktopPane = new JDesktopPane();
-  private final Localizer localizator = new Localizer(UIManager.getDefaults().getDefaultLocale());
+  private final Localizer localizer = new Localizer(UIManager.getDefaults().getDefaultLocale());
   public MainApplicationFrame() {
-    //Make the big window be indented 50 pixels from each edge
-    //of the screen.
     int inset = 50;
     Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
     setBounds(inset, inset,
@@ -42,7 +34,7 @@ public class MainApplicationFrame extends JFrame
 
     setContentPane(desktopPane);
 
-    localizator.localize();
+    localizer.localize();
 
     LogWindow logWindow = createLogWindow();
     addWindow(logWindow);
@@ -69,7 +61,7 @@ public class MainApplicationFrame extends JFrame
     logWindow.setSize(300, 800);
     setMinimumSize(logWindow.getSize());
     logWindow.pack();
-    Logger.debug(localizator.getString("startMessageLogWindow"));
+    Logger.debug(localizer.getString("startMessageLogWindow"));
     return logWindow;
   }
 
@@ -78,36 +70,6 @@ public class MainApplicationFrame extends JFrame
     desktopPane.add(frame);
     frame.setVisible(true);
   }
-
-//    protected JMenuBar createMenuBar() {
-//        JMenuBar menuBar = new JMenuBar();
-//
-//        //Set up the lone menu.
-//        JMenu menu = new JMenu("Document");
-//        menu.setMnemonic(KeyEvent.VK_D);
-//        menuBar.add(menu);
-//
-//        //Set up the first menu item.
-//        JMenuItem menuItem = new JMenuItem("New");
-//        menuItem.setMnemonic(KeyEvent.VK_N);
-//        menuItem.setAccelerator(KeyStroke.getKeyStroke(
-//                KeyEvent.VK_N, ActionEvent.ALT_MASK));
-//        menuItem.setActionCommand("new");
-////        menuItem.addActionListener(this);
-//        menu.add(menuItem);
-//
-//        //Set up the second menu item.
-//        menuItem = new JMenuItem("Quit");
-//        menuItem.setMnemonic(KeyEvent.VK_Q);
-//        menuItem.setAccelerator(KeyStroke.getKeyStroke(
-//                KeyEvent.VK_Q, ActionEvent.ALT_MASK));
-//        menuItem.setActionCommand("quit");
-////        menuItem.addActionListener(this);
-//        menu.add(menuItem);
-//
-//        return menuBar;
-//    }
-
   private JMenuBar generateMenuBar()
   {
     JMenuBar menuBar = new JMenuBar();
@@ -126,101 +88,73 @@ public class MainApplicationFrame extends JFrame
       SwingUtilities.updateComponentTreeUI(this);
     }
     catch (ClassNotFoundException | InstantiationException
-           | IllegalAccessException | UnsupportedLookAndFeelException e)
-    {
-      // just ignore
-    }
+           | IllegalAccessException | UnsupportedLookAndFeelException ignored) {}
   }
 
     private void closeProgram()
     {
-        // Пользователь ничего не выбрал и вышел через закрытие окна
         switch (JOptionPane.showConfirmDialog(
                 this,
-                localizator.getString("exitConfirmationMessage"),
-                localizator.getString("exitProgramOptionName"),
+                localizer.getString("exitConfirmationMessage"),
+                localizer.getString("exitProgramOptionName"),
                 JOptionPane.YES_NO_OPTION,
                 JOptionPane.WARNING_MESSAGE
         )) {
-            case JOptionPane.CLOSED_OPTION -> Logger.debug(localizator.getString("closeExitLogMessage"));
-            case JOptionPane.NO_OPTION -> Logger.debug(localizator.getString("noExitLogMessage"));
+            case JOptionPane.CLOSED_OPTION -> Logger.debug(localizer.getString("closeExitLogMessage"));
+            case JOptionPane.NO_OPTION -> Logger.debug(localizer.getString("noExitLogMessage"));
             case JOptionPane.YES_OPTION -> {
-                Logger.debug(localizator.getString("yesExitLogMessage"));
+                Logger.debug(localizer.getString("yesExitLogMessage"));
                 setDefaultCloseOperation(EXIT_ON_CLOSE);
                 dispose();
             }
         }
     }
-
     private class MenuBuilder {
-
-        private MenuBuilder() {
-
-        }
-
+        private MenuBuilder() {}
         private JMenu createExitMenu()
         {
-            JMenu closeMenu = new JMenu(localizator.getString("closeMenuName"));
-            closeMenu.getAccessibleContext().setAccessibleDescription(
-                    localizator.getString("closeMenuName")
-            );
-
-            {
-                JMenuItem closeItem = new JMenuItem(localizator.getString("closeMenuItemName"));
-                closeItem.setMnemonic(KeyEvent.VK_X);
-                closeItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_X, ActionEvent.SHIFT_MASK));
-                closeItem.addActionListener(actionEvent -> dispatchEvent(new WindowEvent(MainApplicationFrame.this, WindowEvent.WINDOW_CLOSING)));
-
-                closeMenu.add(closeItem);
-            }
+            JMenu closeMenu = new JMenu(localizer.getString("closeMenuName"));
+            closeMenu.getAccessibleContext().setAccessibleDescription(localizer.getString("closeMenuName"));
+            JMenuItem closeItem = new JMenuItem(localizer.getString("closeMenuItemName"));
+            closeItem.setMnemonic(KeyEvent.VK_X);
+            closeItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_X, ActionEvent.SHIFT_MASK));
+            closeItem.addActionListener(actionEvent -> dispatchEvent(new WindowEvent(MainApplicationFrame.this, WindowEvent.WINDOW_CLOSING)));
+            closeMenu.add(closeItem);
             return closeMenu;
         }
 
         private JMenu createTestMenu()
         {
-            JMenu testMenu = new JMenu(localizator.getString("testMenuName"));
-            testMenu.getAccessibleContext().setAccessibleDescription(
-                    localizator.getString("testMenuName"));
-
-            {
-                JMenuItem addLogMessageItem = new JMenuItem(localizator.getString("logMessageMenuItemName"));
-                addLogMessageItem.setMnemonic(KeyEvent.VK_T);
-                addLogMessageItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_T, ActionEvent.SHIFT_MASK));
-                addLogMessageItem.addActionListener((event) ->
-                        Logger.debug(localizator.getString("logMessageContent"))
-                );
-                testMenu.add(addLogMessageItem);
-            }
+            JMenu testMenu = new JMenu(localizer.getString("testMenuName"));
+            testMenu.getAccessibleContext().setAccessibleDescription(localizer.getString("testMenuName"));
+            JMenuItem addLogMessageItem = new JMenuItem(localizer.getString("logMessageMenuItemName"));
+            addLogMessageItem.setMnemonic(KeyEvent.VK_T);
+            addLogMessageItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_T, ActionEvent.SHIFT_MASK));
+            addLogMessageItem.addActionListener((event) -> Logger.debug(localizer.getString("logMessageContent")));
+            testMenu.add(addLogMessageItem);
             return testMenu;
         }
 
         private JMenu createLookAndViewMenu()
         {
-            JMenu lookAndFeelMenu = new JMenu(localizator.getString("lookAndFeelMenuName"));
-            lookAndFeelMenu.getAccessibleContext().setAccessibleDescription(
-                    localizator.getString("lookAndFeelMenuName"));
+            JMenu lookAndFeelMenu = new JMenu(localizer.getString("lookAndFeelMenuName"));
+            lookAndFeelMenu.getAccessibleContext().setAccessibleDescription(localizer.getString("lookAndFeelMenuName"));
 
-            {
-                JMenuItem systemLookAndFeel = new JMenuItem(localizator.getString("systemLookAndFeelMenuItemName"));
-                systemLookAndFeel.setMnemonic(KeyEvent.VK_S);
-                systemLookAndFeel.addActionListener((event) -> {
+            JMenuItem systemLookAndFeel = new JMenuItem(localizer.getString("systemLookAndFeelMenuItemName"));
+            systemLookAndFeel.setMnemonic(KeyEvent.VK_S);
+            systemLookAndFeel.addActionListener((event) -> {
                     MainApplicationFrame.this.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
                     MainApplicationFrame.this.invalidate();
                 });
+            lookAndFeelMenu.add(systemLookAndFeel);
 
-                lookAndFeelMenu.add(systemLookAndFeel);
-            }
-
-            {
-                JMenuItem crossplatformLookAndFeel = new JMenuItem(localizator.getString("universalLookAndFeelMenuItemName"));
-                crossplatformLookAndFeel.setMnemonic(KeyEvent.VK_U);
-                crossplatformLookAndFeel.addActionListener((event) -> {
-                    MainApplicationFrame.this.setLookAndFeel(
-                            UIManager.getCrossPlatformLookAndFeelClassName());
+            JMenuItem crossplatformLookAndFeel = new JMenuItem(localizer.getString("universalLookAndFeelMenuItemName"));
+            crossplatformLookAndFeel.setMnemonic(KeyEvent.VK_U);
+            crossplatformLookAndFeel.addActionListener((event) -> {
+                    MainApplicationFrame.this.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
                     MainApplicationFrame.this.invalidate();
                 });
-                lookAndFeelMenu.add(crossplatformLookAndFeel);
-            }
+            lookAndFeelMenu.add(crossplatformLookAndFeel);
             return lookAndFeelMenu;
         }
     }

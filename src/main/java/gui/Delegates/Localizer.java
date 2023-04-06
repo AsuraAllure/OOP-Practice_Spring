@@ -1,4 +1,4 @@
-package gui.Utility;
+package gui.Delegates;
 
 import javax.swing.UIManager;
 import java.util.Locale;

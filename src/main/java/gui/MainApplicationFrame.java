@@ -1,11 +1,10 @@
 package gui;
 
-import java.awt.Dimension;
-import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.event.ActionEvent;
+import java.beans.PropertyVetoException;
 
 import javax.swing.JDesktopPane;
 import javax.swing.JFrame;
@@ -19,59 +18,40 @@ import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
 
-import gui.Utility.Localizer;
+import gui.Delegates.Configurator;
+import gui.Delegates.Localizer;
+import gui.Delegates.SaveConfigurator;
 import gui.Windows.GameWindow;
 import gui.Windows.LogWindow;
 import log.Logger;
 
 public class MainApplicationFrame extends JFrame
 {
-  private final JDesktopPane desktopPane = new JDesktopPane();
+  private final Configurator configurator;
+  private final LogWindow logWindow;
+  private final GameWindow gameWindow;
   private final Localizer localizer = new Localizer(UIManager.getDefaults().getDefaultLocale());
-  public MainApplicationFrame() {
-    int inset = 50;
-    Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-    setBounds(inset, inset,
-        screenSize.width  - inset*2,
-        screenSize.height - inset*2);
 
-    setContentPane(desktopPane);
+    public MainApplicationFrame() {
+
+    configurator = new SaveConfigurator();
+
+    configurator.loadMainWindow(this);
+        JDesktopPane desktopPane = new JDesktopPane();
+        setContentPane(desktopPane);
+
+    logWindow = configurator.loadLogWindow(desktopPane);
+    gameWindow = configurator.loadGameWindow(desktopPane);
 
     localizer.localize();
-
-    LogWindow logWindow = createLogWindow();
-    addWindow(logWindow);
-
-    GameWindow gameWindow = new GameWindow();
-    gameWindow.setSize(400,  400);
-    addWindow(gameWindow);
-
     setJMenuBar(generateMenuBar());
     addWindowListener(new WindowAdapter() {
-    @Override
+        @Override
     public void windowClosing(WindowEvent e) {
                 closeProgram();
         }
     });
-
     setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
-  }
-
-  protected LogWindow createLogWindow()
-  {
-    LogWindow logWindow = new LogWindow(Logger.getDefaultLogSource());
-    logWindow.setLocation(10,10);
-    logWindow.setSize(300, 800);
-    setMinimumSize(logWindow.getSize());
-    logWindow.pack();
-    Logger.debug(localizer.getString("startMessageLogWindow"));
-    return logWindow;
-  }
-
-  protected void addWindow(JInternalFrame frame)
-  {
-    desktopPane.add(frame);
-    frame.setVisible(true);
   }
   private JMenuBar generateMenuBar()
   {
@@ -108,6 +88,10 @@ public class MainApplicationFrame extends JFrame
             case JOptionPane.YES_OPTION -> {
                 Logger.debug(localizer.getString("yesExitLogMessage"));
                 setDefaultCloseOperation(EXIT_ON_CLOSE);
+                configurator.saveLogWindow(logWindow);
+                configurator.saveMainWindow(this);
+                configurator.saveGameWindow(gameWindow);
+                configurator.save();
                 dispose();
             }
         }
@@ -133,7 +117,7 @@ public class MainApplicationFrame extends JFrame
             JMenuItem addLogMessageItem = new JMenuItem(localizer.getString("logMessageMenuItemName"));
             addLogMessageItem.setMnemonic(KeyEvent.VK_T);
             addLogMessageItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_T, ActionEvent.SHIFT_MASK));
-            addLogMessageItem.addActionListener((event) -> Logger.debug(localizer.getString("logMessageContent")));
+            addLogMessageItem.addActionListener((event) -> Logger.debug("New Line"));
             testMenu.add(addLogMessageItem);
             return testMenu;
         }

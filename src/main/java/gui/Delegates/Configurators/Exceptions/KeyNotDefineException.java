@@ -1,4 +1,3 @@
 package gui.Delegates.Configurators.Exceptions;
 
-public class KeyNotDefineException extends Exception{
-}
+public class KeyNotDefineException extends Exception {}

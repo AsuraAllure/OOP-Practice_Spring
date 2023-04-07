@@ -1,6 +1,7 @@
 package gui;
 
-import java.awt.*;
+import java.awt.Dimension;
+import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -30,30 +31,27 @@ public class MainApplicationFrame extends JFrame
   private final LogWindow logWindow = new LogWindow(Logger.getDefaultLogSource());
   private final GameWindow gameWindow = new GameWindow();
   private final Localizer localizer = new Localizer(UIManager.getDefaults().getDefaultLocale());
-
-    public MainApplicationFrame() {
+  public MainApplicationFrame() {
     int inset = 50;
     Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-    setBounds(new Rectangle(
-                    inset, inset,
-                    screenSize.width  - inset*2,
-                    screenSize.height - inset*2
-            ));
-
+    setBounds(inset, inset,
+        screenSize.width  - inset*2,
+        screenSize.height - inset*2);
 
     configurator = new SaveConfigurator();
 
     JDesktopPane desktopPane = new JDesktopPane();
     setContentPane(desktopPane);
 
-    configurator.loadInternalFrame(desktopPane, logWindow, "logFrame");
-    configurator.loadInternalFrame(desktopPane, gameWindow, "gameFrame");
-
     localizer.localize();
+
+    configurator.loadInternalFrame(desktopPane, logWindow, "logFrame");
+    Logger.debug("Protocol is working.");
+    configurator.loadInternalFrame(desktopPane, gameWindow, "gameFrame");
 
     setJMenuBar(generateMenuBar());
     addWindowListener(new WindowAdapter() {
-        @Override
+    @Override
     public void windowClosing(WindowEvent e) {
                 closeProgram();
         }

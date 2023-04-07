@@ -1,6 +1,7 @@
 package gui.Delegates.Configurators.Boxes;
 
-import java.awt.*;
+import java.awt.Dimension;
+import java.awt.Point;
 import java.io.Serializable;
 
 public class InternalFrameBoxes implements Serializable {

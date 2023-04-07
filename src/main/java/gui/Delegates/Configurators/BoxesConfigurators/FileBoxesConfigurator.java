@@ -4,12 +4,17 @@ import gui.Delegates.Configurators.Boxes.Boxes;
 import gui.Delegates.Configurators.Boxes.DefaultBoxes;
 import gui.Delegates.Configurators.Exceptions.BoxesNotCompleteException;
 
-import java.io.*;
+import java.io.File;
+import java.io.ObjectOutputStream;
+import java.io.ObjectInputStream;
+import java.io.IOException;
+import java.io.FileOutputStream;
+import java.io.FileInputStream;
 
 public class FileBoxesConfigurator implements BoxesConfigurator{
     public FileBoxesConfigurator(){}
 
-    private File saveFile = new File(System.getProperty("user.home")+"\\Robot\\saveFile.txt");
+    private final File saveFile = new File(System.getProperty("user.home")+"\\Robot\\saveFile.txt");
     @Override
     public Boxes getBoxes() throws BoxesNotCompleteException {
         Boxes container;
@@ -39,7 +44,7 @@ public class FileBoxesConfigurator implements BoxesConfigurator{
         try (ObjectOutputStream outputStream = new ObjectOutputStream(new FileOutputStream(saveFile))){
             try {
                 outputStream.writeObject(container);
-            } catch (Exception e){}
+            } catch (Exception ignored){}
         }catch (IOException ignore) {}
     }
 }

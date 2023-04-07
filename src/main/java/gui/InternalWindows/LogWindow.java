@@ -1,4 +1,4 @@
-package gui.Windows;
+package gui.InternalWindows;
 
 import java.awt.BorderLayout;
 import java.awt.EventQueue;

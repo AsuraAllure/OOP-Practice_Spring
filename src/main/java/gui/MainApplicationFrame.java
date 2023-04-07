@@ -1,14 +1,13 @@
 package gui;
 
+import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.event.ActionEvent;
-import java.beans.PropertyVetoException;
 
 import javax.swing.JDesktopPane;
 import javax.swing.JFrame;
-import javax.swing.JInternalFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
@@ -20,30 +19,38 @@ import javax.swing.KeyStroke;
 
 import gui.Delegates.Configurator;
 import gui.Delegates.Localizer;
-import gui.Delegates.SaveConfigurator;
-import gui.Windows.GameWindow;
-import gui.Windows.LogWindow;
+import gui.Delegates.Configurators.SaveConfigurator;
+import gui.InternalWindows.GameWindow;
+import gui.InternalWindows.LogWindow;
 import log.Logger;
 
 public class MainApplicationFrame extends JFrame
 {
   private final Configurator configurator;
-  private final LogWindow logWindow;
-  private final GameWindow gameWindow;
+  private final LogWindow logWindow = new LogWindow(Logger.getDefaultLogSource());
+  private final GameWindow gameWindow = new GameWindow();
   private final Localizer localizer = new Localizer(UIManager.getDefaults().getDefaultLocale());
 
     public MainApplicationFrame() {
+    int inset = 50;
+    Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+    setBounds(new Rectangle(
+                    inset, inset,
+                    screenSize.width  - inset*2,
+                    screenSize.height - inset*2
+            ));
+
 
     configurator = new SaveConfigurator();
 
-    configurator.loadMainWindow(this);
-        JDesktopPane desktopPane = new JDesktopPane();
-        setContentPane(desktopPane);
+    JDesktopPane desktopPane = new JDesktopPane();
+    setContentPane(desktopPane);
 
-    logWindow = configurator.loadLogWindow(desktopPane);
-    gameWindow = configurator.loadGameWindow(desktopPane);
+    configurator.loadInternalFrame(desktopPane, logWindow, "logFrame");
+    configurator.loadInternalFrame(desktopPane, gameWindow, "gameFrame");
 
     localizer.localize();
+
     setJMenuBar(generateMenuBar());
     addWindowListener(new WindowAdapter() {
         @Override
@@ -51,6 +58,7 @@ public class MainApplicationFrame extends JFrame
                 closeProgram();
         }
     });
+
     setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
   }
   private JMenuBar generateMenuBar()
@@ -88,9 +96,8 @@ public class MainApplicationFrame extends JFrame
             case JOptionPane.YES_OPTION -> {
                 Logger.debug(localizer.getString("yesExitLogMessage"));
                 setDefaultCloseOperation(EXIT_ON_CLOSE);
-                configurator.saveLogWindow(logWindow);
-                configurator.saveMainWindow(this);
-                configurator.saveGameWindow(gameWindow);
+                configurator.saveInternalFrame(logWindow, "logFrame");
+                configurator.saveInternalFrame(gameWindow, "gameFrame");
                 configurator.save();
                 dispose();
             }

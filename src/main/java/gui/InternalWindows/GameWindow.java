@@ -1,4 +1,4 @@
-package gui.Windows;
+package gui.InternalWindows;
 
 import gui.GameVisualizer;
 

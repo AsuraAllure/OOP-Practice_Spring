@@ -1,20 +1,11 @@
 package gui.Delegates;
 
-import gui.Delegates.Configurators.Exceptions.KeyNotDefineException;
-import gui.MainApplicationFrame;
-import gui.Windows.GameWindow;
-import gui.Windows.LogWindow;
-
-import javax.swing.*;
+import javax.swing.JInternalFrame;
+import javax.swing.JDesktopPane;
 
 
 public interface Configurator {
-    void loadMainWindow(MainApplicationFrame mainFrame) ;
-    LogWindow loadLogWindow(JDesktopPane pane);
-    GameWindow loadGameWindow(JDesktopPane pane);
-
-    void saveMainWindow(MainApplicationFrame mainFrame);
-    void saveLogWindow(LogWindow logWindow);
-    void saveGameWindow(GameWindow gameWindow);
+    void loadInternalFrame(JDesktopPane pane, JInternalFrame frame, String key);
+    void saveInternalFrame(JInternalFrame frame, String key);
     void save();
 }

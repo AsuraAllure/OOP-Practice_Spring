@@ -18,12 +18,20 @@ import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
 
-import gui.Delegates.Configurator;
-import gui.Delegates.Localizer;
-import gui.Delegates.Configurators.SaveConfigurator;
+import gui.Extends.Configurators.Configurator;
+import gui.Extends.Configurators.ConfiguratorInstance.FileConfigurator;
+import gui.Extends.Configurators.Exceptions.InternalFrameLoadException;
+import gui.Extends.Localizer.Localizer;
 import gui.InternalWindows.GameWindow;
 import gui.InternalWindows.LogWindow;
 import log.Logger;
+/*
+    Заставить окна самим сохранять своё состояние.
+    Разные места сохранения окон.
+    Спецификация сохранения.
+    Добавление нового окна.
+
+ */
 
 public class MainApplicationFrame extends JFrame
 {
@@ -38,16 +46,29 @@ public class MainApplicationFrame extends JFrame
         screenSize.width  - inset*2,
         screenSize.height - inset*2);
 
-    configurator = new SaveConfigurator();
+    configurator = new FileConfigurator();
 
     JDesktopPane desktopPane = new JDesktopPane();
     setContentPane(desktopPane);
 
     localizer.localize();
 
-    configurator.loadInternalFrame(desktopPane, logWindow, "logFrame");
+    try {
+        configurator.loadInternalFrame(desktopPane, logWindow, "logFrame");
+    }catch (InternalFrameLoadException e) {
+        logWindow.setSize(400, 400);
+        logWindow.setLocation(10,10);
+    }
+
     Logger.debug("Protocol is working.");
-    configurator.loadInternalFrame(desktopPane, gameWindow, "gameFrame");
+
+    try {
+        configurator.loadInternalFrame(desktopPane, gameWindow, "gameFrame");
+    }catch (InternalFrameLoadException e) {
+        gameWindow.setSize(300, 800);
+        gameWindow.setLocation(10, 500);
+
+    }
 
     setJMenuBar(generateMenuBar());
     addWindowListener(new WindowAdapter() {
@@ -96,7 +117,7 @@ public class MainApplicationFrame extends JFrame
                 setDefaultCloseOperation(EXIT_ON_CLOSE);
                 configurator.saveInternalFrame(logWindow, "logFrame");
                 configurator.saveInternalFrame(gameWindow, "gameFrame");
-                configurator.save();
+
                 dispose();
             }
         }

@@ -1,4 +1,4 @@
-package gui.Delegates;
+package gui.Extends.Localizer;
 
 import javax.swing.UIManager;
 import java.util.Locale;

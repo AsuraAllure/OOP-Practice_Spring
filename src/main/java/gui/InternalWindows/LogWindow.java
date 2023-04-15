@@ -1,17 +1,18 @@
 package gui.InternalWindows;
 
-import java.awt.BorderLayout;
-import java.awt.EventQueue;
-import java.awt.TextArea;
+import java.awt.*;
+import java.beans.PropertyVetoException;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 
-import javax.swing.JInternalFrame;
 import javax.swing.JPanel;
 
 import log.LogChangeListener;
 import log.LogEntry;
 import log.LogWindowSource;
 
-public class LogWindow extends JInternalFrame implements LogChangeListener
+public class LogWindow extends AbstractSerializableInternalFrame implements LogChangeListener
 {
   private LogWindowSource m_logSource;
   private TextArea m_logContent;
@@ -46,5 +47,26 @@ public class LogWindow extends JInternalFrame implements LogChangeListener
   public void onLogChanged()
   {
     EventQueue.invokeLater(this::updateLogContent);
+  }
+
+  @Override
+  public void save(ObjectOutputStream out) {
+    try {
+      out.writeObject(getSize());
+      out.writeObject(getLocation());
+      out.writeObject(isIcon);
+    }catch (IOException e){
+      e.printStackTrace();
+    }
+  }
+  @Override
+  public void load(ObjectInputStream input) {
+    try {
+      setSize((Dimension) input.readObject());
+      setLocation((Point) input.readObject());
+      setIcon((boolean) input.readObject());
+    }catch (IOException | ClassNotFoundException e){
+      e.printStackTrace();
+    }catch (PropertyVetoException ignored){}
   }
 }

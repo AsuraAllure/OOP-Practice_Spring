@@ -18,8 +18,6 @@ import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
 
-import gui.Extends.Configurators.Configurator;
-import gui.Extends.Configurators.ConfiguratorInstance.FileConfigurator;
 import gui.Extends.Configurators.Exceptions.InternalFrameLoadException;
 import gui.Extends.Localizer.Localizer;
 import gui.InternalWindows.GameWindow;
@@ -35,26 +33,29 @@ import log.Logger;
 
 public class MainApplicationFrame extends JFrame
 {
-  private final Configurator configurator;
-  private final LogWindow logWindow = new LogWindow(Logger.getDefaultLogSource());
-  private final GameWindow gameWindow = new GameWindow();
+  private final LogWindow logWindow;
+  private final GameWindow gameWindow;
   private final Localizer localizer = new Localizer(UIManager.getDefaults().getDefaultLocale());
-  public MainApplicationFrame() {
+
+  // Изменять только классы в InternalWindows
+  // Дополнить Abstract класс методами конфигурации
+
+  public MainApplicationFrame(LogWindow log, GameWindow game) {
     int inset = 50;
     Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
     setBounds(inset, inset,
         screenSize.width  - inset*2,
         screenSize.height - inset*2);
-
-    configurator = new FileConfigurator();
-
     JDesktopPane desktopPane = new JDesktopPane();
     setContentPane(desktopPane);
+
+    logWindow = log;
+    gameWindow = game;
 
     localizer.localize();
 
     try {
-        configurator.loadInternalFrame(desktopPane, logWindow, "logFrame");
+        logWindow.loadConfiguration(desktopPane);
     }catch (InternalFrameLoadException e) {
         logWindow.setSize(400, 400);
         logWindow.setLocation(10,10);
@@ -63,7 +64,7 @@ public class MainApplicationFrame extends JFrame
     Logger.debug("Protocol is working.");
 
     try {
-        configurator.loadInternalFrame(desktopPane, gameWindow, "gameFrame");
+        game.loadConfiguration(desktopPane);
     }catch (InternalFrameLoadException e) {
         gameWindow.setSize(300, 800);
         gameWindow.setLocation(10, 500);
@@ -115,9 +116,8 @@ public class MainApplicationFrame extends JFrame
             case JOptionPane.YES_OPTION -> {
                 Logger.debug(localizer.getString("yesExitLogMessage"));
                 setDefaultCloseOperation(EXIT_ON_CLOSE);
-                configurator.saveInternalFrame(logWindow, "logFrame");
-                configurator.saveInternalFrame(gameWindow, "gameFrame");
-
+                logWindow.saveConfiguration();
+                gameWindow.saveConfiguration();
                 dispose();
             }
         }

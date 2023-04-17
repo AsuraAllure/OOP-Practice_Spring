@@ -8,6 +8,6 @@ import javax.swing.JDesktopPane;
 
 
 public interface Configurator {
-    void loadInternalFrame(JDesktopPane pane, AbstractSerializableInternalFrame frame, String key) throws InternalFrameLoadException;
-    void saveInternalFrame(AbstractSerializableInternalFrame frame, String key);
+    void loadInternalFrame(JDesktopPane pane, AbstractSerializableInternalFrame frame) throws InternalFrameLoadException;
+    void saveInternalFrame(AbstractSerializableInternalFrame frame);
 }

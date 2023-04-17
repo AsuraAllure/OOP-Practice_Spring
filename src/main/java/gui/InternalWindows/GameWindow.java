@@ -1,5 +1,7 @@
 package gui.InternalWindows;
 
+import gui.Extends.Configurators.Configurator;
+import gui.Extends.Configurators.Exceptions.InternalFrameLoadException;
 import gui.GameVisualizer;
 
 import java.awt.*;
@@ -10,12 +12,14 @@ import java.io.ObjectOutputStream;
 
 import javax.swing.*;
 
-public class GameWindow extends AbstractSerializableInternalFrame
+public class GameWindow extends AbstractSerializableInternalFrame implements Configurable
 {
+  private final Configurator configurator;
   private final GameVisualizer m_visualizer;
-  public GameWindow()
+  public GameWindow(Configurator conf)
   {
     super("Игровое поле", true, true, true, true);
+    configurator = conf;
     m_visualizer = new GameVisualizer();
     JPanel panel = new JPanel(new BorderLayout());
     panel.add(m_visualizer, BorderLayout.CENTER);
@@ -42,5 +46,15 @@ public class GameWindow extends AbstractSerializableInternalFrame
     }catch (IOException | ClassNotFoundException e){
       e.printStackTrace();
     }catch (PropertyVetoException ignored){}
+  }
+
+  @Override
+  public void saveConfiguration() {
+    configurator.saveInternalFrame(this);
+  }
+
+  @Override
+  public void loadConfiguration(JDesktopPane pane) throws InternalFrameLoadException {
+    configurator.loadInternalFrame(pane, this);
   }
 }

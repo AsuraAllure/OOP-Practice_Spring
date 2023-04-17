@@ -9,13 +9,16 @@ import java.io.*;
 
 public class FileConfigurator implements Configurator {
     private final String saveDirectory = System.getProperty("user.home")+ "\\Robot";
-    public FileConfigurator(){}
+    private final String filename ;
+    public FileConfigurator(String filename){
+        this.filename = filename;
+    }
     @Override
-    public void loadInternalFrame(JDesktopPane pane, AbstractSerializableInternalFrame frame, String key)
+    public void loadInternalFrame(JDesktopPane pane, AbstractSerializableInternalFrame frame)
             throws InternalFrameLoadException {
         pane.add(frame);
         frame.setVisible(true);
-        File saveFile = new File(saveDirectory +"\\" + key +".txt");
+        File saveFile = new File(saveDirectory +"\\" + filename +".txt");
         if (!saveFile.exists())
             try {
                 saveFile.createNewFile();
@@ -26,14 +29,12 @@ public class FileConfigurator implements Configurator {
         } catch (IOException e){
             throw new InternalFrameLoadException();
         }
-
-
         frame.setVisible(true);
     }
 
     @Override
-    public void saveInternalFrame(AbstractSerializableInternalFrame frame, String key) {
-        try(ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(saveDirectory +"\\"+key+".txt"))){
+    public void saveInternalFrame(AbstractSerializableInternalFrame frame) {
+        try(ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(saveDirectory +"\\"+filename+".txt"))){
             frame.save(out);
         } catch (IOException ignored) {}
     }

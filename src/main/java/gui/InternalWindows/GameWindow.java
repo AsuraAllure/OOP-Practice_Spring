@@ -2,7 +2,7 @@ package gui.InternalWindows;
 
 import gui.Extends.Configurators.Configurator;
 import gui.Extends.Configurators.Exceptions.InternalFrameLoadException;
-import gui.GameVisualizer;
+import gui.GameVisual.GameVisualizer;
 
 import java.awt.*;
 import java.beans.PropertyVetoException;
@@ -12,7 +12,7 @@ import java.io.ObjectOutputStream;
 
 import javax.swing.*;
 
-public class GameWindow extends AbstractSerializableInternalFrame implements Configurable
+public class GameWindow extends AbstractSerializableInternalFrame
 {
   private final Configurator configurator;
   private final GameVisualizer m_visualizer;
@@ -36,7 +36,6 @@ public class GameWindow extends AbstractSerializableInternalFrame implements Con
       e.printStackTrace();
     }
   }
-
   @Override
   public void load(ObjectInputStream input) {
     try {
@@ -47,12 +46,10 @@ public class GameWindow extends AbstractSerializableInternalFrame implements Con
       e.printStackTrace();
     }catch (PropertyVetoException ignored){}
   }
-
   @Override
   public void saveConfiguration() {
     configurator.saveInternalFrame(this);
   }
-
   @Override
   public void loadConfiguration(JDesktopPane pane) throws InternalFrameLoadException {
     configurator.loadInternalFrame(pane, this);

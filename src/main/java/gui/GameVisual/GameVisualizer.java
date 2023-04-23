@@ -1,4 +1,4 @@
-package gui;
+package gui.GameVisual;
 
 import java.awt.Color;
 import java.awt.EventQueue;
@@ -8,12 +8,14 @@ import java.awt.Point;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.geom.AffineTransform;
+import java.util.Observable;
+import java.util.Observer;
 import java.util.Timer;
 import java.util.TimerTask;
 
 import javax.swing.JPanel;
 
-public class GameVisualizer extends JPanel
+public class GameVisualizer extends JPanel implements Observer
 {
   private final Timer m_timer = initTimer();
 
@@ -32,9 +34,12 @@ public class GameVisualizer extends JPanel
 
   private static final double maxVelocity = 0.1;
   private static final double maxAngularVelocity = 0.001;
+  //private GameModel model = new GameModel();
 
   public GameVisualizer()
   {
+    //model.addObserver(this::update);
+    // Всё это модель должна предоставлять представлению, то есть notify-ить
     m_timer.schedule(new TimerTask()
     {
       @Override
@@ -56,6 +61,7 @@ public class GameVisualizer extends JPanel
       @Override
       public void mouseClicked(MouseEvent e)
       {
+        // model.setTargetPosition(e.getPoint())
         setTargetPosition(e.getPoint());
         repaint();
       }
@@ -163,6 +169,7 @@ public class GameVisualizer extends JPanel
     return (int)(value + 0.5);
   }
 
+  // repaint вызывает метод paint
   @Override
   public void paint(Graphics g)
   {
@@ -206,5 +213,10 @@ public class GameVisualizer extends JPanel
     fillOval(g, x, y, 5, 5);
     g.setColor(Color.BLACK);
     drawOval(g, x, y, 5, 5);
+  }
+
+  @Override
+  public void update(Observable observable, Object o) {
+    EventQueue.invokeLater(this::repaint);
   }
 }

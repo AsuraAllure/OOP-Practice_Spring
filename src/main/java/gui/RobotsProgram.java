@@ -1,6 +1,7 @@
 package gui;
 
 import gui.Extends.Configurators.ConfiguratorInstance.FileConfigurator;
+import gui.InternalWindows.GameLogger;
 import gui.InternalWindows.GameWindow;
 import gui.InternalWindows.LogWindow;
 import log.Logger;
@@ -25,7 +26,8 @@ public class RobotsProgram
     SwingUtilities.invokeLater(() -> {
       MainApplicationFrame frame = new MainApplicationFrame(
               new LogWindow(Logger.getDefaultLogSource(), new FileConfigurator("logFrame")),
-              new GameWindow(new FileConfigurator("gameFrame"))
+              new GameWindow(new FileConfigurator("gameFrame")),
+              new GameLogger(new FileConfigurator("gameLogger"))
       );
       frame.pack();
       frame.setVisible(true);

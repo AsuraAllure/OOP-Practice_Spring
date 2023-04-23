@@ -20,6 +20,7 @@ import javax.swing.KeyStroke;
 
 import gui.Extends.Configurators.Exceptions.InternalFrameLoadException;
 import gui.Extends.Localizer.Localizer;
+import gui.InternalWindows.GameLogger;
 import gui.InternalWindows.GameWindow;
 import gui.InternalWindows.LogWindow;
 import log.Logger;
@@ -35,12 +36,13 @@ public class MainApplicationFrame extends JFrame
 {
   private final LogWindow logWindow;
   private final GameWindow gameWindow;
+  private final GameLogger gameLogger;
   private final Localizer localizer = new Localizer(UIManager.getDefaults().getDefaultLocale());
 
   // Изменять только классы в InternalWindows
   // Дополнить Abstract класс методами конфигурации
 
-  public MainApplicationFrame(LogWindow log, GameWindow game) {
+  public MainApplicationFrame(LogWindow log, GameWindow game, GameLogger gameLog) {
     int inset = 50;
     Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
     setBounds(inset, inset,
@@ -51,6 +53,7 @@ public class MainApplicationFrame extends JFrame
 
     logWindow = log;
     gameWindow = game;
+    gameLogger = gameLog;
 
     localizer.localize();
 
@@ -68,8 +71,16 @@ public class MainApplicationFrame extends JFrame
     }catch (InternalFrameLoadException e) {
         gameWindow.setSize(300, 800);
         gameWindow.setLocation(10, 500);
-
     }
+
+    try {
+          gameLogger.loadConfiguration(desktopPane);
+    }catch (InternalFrameLoadException e) {
+        gameLogger.setSize(400, 400);
+        gameLogger.setLocation(10,10);
+    }
+
+
 
     setJMenuBar(generateMenuBar());
     addWindowListener(new WindowAdapter() {
@@ -118,6 +129,7 @@ public class MainApplicationFrame extends JFrame
                 setDefaultCloseOperation(EXIT_ON_CLOSE);
                 logWindow.saveConfiguration();
                 gameWindow.saveConfiguration();
+                gameLogger.saveConfiguration();
                 dispose();
             }
         }

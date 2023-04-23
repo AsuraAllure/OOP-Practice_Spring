@@ -2,6 +2,7 @@ package gui.InternalWindows;
 
 import gui.Extends.Configurators.Configurator;
 import gui.Extends.Configurators.Exceptions.InternalFrameLoadException;
+import gui.GameVisual.GameModel;
 import gui.GameVisual.GameVisualizer;
 
 import java.awt.*;
@@ -16,11 +17,15 @@ public class GameWindow extends AbstractSerializableInternalFrame
 {
   private final Configurator configurator;
   private final GameVisualizer m_visualizer;
+  private final GameModel m_model = new GameModel();
   public GameWindow(Configurator conf)
   {
     super("Игровое поле", true, true, true, true);
     configurator = conf;
-    m_visualizer = new GameVisualizer();
+
+    m_visualizer = new GameVisualizer(m_model);
+    m_model.addObserver(m_visualizer);
+
     JPanel panel = new JPanel(new BorderLayout());
     panel.add(m_visualizer, BorderLayout.CENTER);
     getContentPane().add(panel);

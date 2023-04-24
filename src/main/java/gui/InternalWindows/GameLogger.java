@@ -27,9 +27,8 @@ public class GameLogger extends LogWindow implements Observer {
         prevPos = pos.robotPositions;
 
         String strMessage = "Robot position: "+ pos.robotPositions.x + " "
-                + pos.robotPositions.y + " " + pos.robotPositions.direction +" , Target "
-                + pos.targetPositions.x + " " + pos.targetPositions.y + "   a"+
-                (angleTo(pos.robotPositions.x, pos.robotPositions.y, pos.targetPositions.x, pos.targetPositions.y) - pos.robotPositions.direction);
+                + pos.robotPositions.y + " " + pos.robotPositions.direction +" , Target:"
+                + pos.targetPositions.x + " " + pos.targetPositions.y ;
         m_logSource.append(LogLevel.Debug, strMessage);
     }
     private static double angleTo(double fromX, double fromY, double toX, double toY)

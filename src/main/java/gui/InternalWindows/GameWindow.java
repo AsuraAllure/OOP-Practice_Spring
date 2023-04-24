@@ -30,6 +30,9 @@ public class GameWindow extends AbstractSerializableInternalFrame
     panel.add(m_visualizer, BorderLayout.CENTER);
     getContentPane().add(panel);
   }
+  public GameModel getModel(){
+    return m_model;
+  }
 
   @Override
   public void save(ObjectOutputStream out) {

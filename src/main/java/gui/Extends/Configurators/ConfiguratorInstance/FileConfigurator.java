@@ -17,13 +17,11 @@ public class FileConfigurator implements Configurator {
     public void loadInternalFrame(JDesktopPane pane, AbstractSerializableInternalFrame frame)
             throws InternalFrameLoadException {
         pane.add(frame);
-        boolean wasCreated = false;
         frame.setVisible(true);
         File saveFile = new File(saveDirectory +"\\" + filename +".txt");
         if (!saveFile.exists())
             try {
                 saveFile.createNewFile();
-                wasCreated = true;
             }catch (IOException e){ throw new InternalFrameLoadException();}
 
         try(ObjectInputStream input = new ObjectInputStream(new FileInputStream(saveFile))) {

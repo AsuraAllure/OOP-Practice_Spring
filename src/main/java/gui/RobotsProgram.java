@@ -4,6 +4,7 @@ import gui.Extends.Configurators.ConfiguratorInstance.FileConfigurator;
 import gui.InternalWindows.GameLogger;
 import gui.InternalWindows.GameWindow;
 import gui.InternalWindows.LogWindow;
+import log.LogWindowSource;
 import log.Logger;
 
 import java.awt.Frame;
@@ -27,7 +28,7 @@ public class RobotsProgram
       MainApplicationFrame frame = new MainApplicationFrame(
               new LogWindow(Logger.getDefaultLogSource(), new FileConfigurator("logFrame")),
               new GameWindow(new FileConfigurator("gameFrame")),
-              new GameLogger(new FileConfigurator("gameLogger"))
+              new GameLogger(new LogWindowSource(100), new FileConfigurator("gameLogger"), false)
       );
       frame.pack();
       frame.setVisible(true);

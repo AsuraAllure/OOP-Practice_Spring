@@ -116,15 +116,25 @@ public class GameModel extends Observable {
         double velocity = maxVelocity;
         double angleToTarget = angleTo(m_robotPositionX, m_robotPositionY, m_targetPositionX, m_targetPositionY);
         double angularVelocity = 0;
-        if (angleToTarget > m_robotDirection)
-        {
-            angularVelocity = maxAngularVelocity;
-        }
-        if (angleToTarget < m_robotDirection)
-        {
+
+        if (angleToTarget - m_robotDirection > Math.PI){
             angularVelocity = -maxAngularVelocity;
         }
 
+        if (angleToTarget - m_robotDirection < -Math.PI){
+            angularVelocity = maxAngularVelocity;
+        }
+        if (angleToTarget - m_robotDirection < Math.PI && angleToTarget - m_robotDirection >=0){
+            angularVelocity = maxAngularVelocity;
+        }
+
+        if (angleToTarget - m_robotDirection < 0 && angleToTarget - m_robotDirection >=-Math.PI){
+            angularVelocity = -maxAngularVelocity;
+        }
+        if (unreachable()) {
+            angularVelocity = 0;
+
+        }
         moveRobot(velocity, angularVelocity, 10);
     }
 
@@ -132,24 +142,48 @@ public class GameModel extends Observable {
     {
         velocity = applyLimits(velocity, 0, maxVelocity);
         angularVelocity = applyLimits(angularVelocity, -maxAngularVelocity, maxAngularVelocity);
-        double newX = m_robotPositionX + velocity / angularVelocity *
-                (Math.sin(m_robotDirection  + angularVelocity * duration) -
-                        Math.sin(m_robotDirection));
+
+
+        double newX = m_robotPositionX + (velocity / angularVelocity) *
+                (Math.sin(m_robotDirection  + angularVelocity * duration) - Math.sin(m_robotDirection));
+
+
         if (!Double.isFinite(newX))
         {
             newX = m_robotPositionX + velocity * duration * Math.cos(m_robotDirection);
         }
+
         double newY = m_robotPositionY - velocity / angularVelocity *
-                (Math.cos(m_robotDirection  + angularVelocity * duration) -
-                        Math.cos(m_robotDirection));
+                (Math.cos(m_robotDirection  + angularVelocity * duration) - Math.cos(m_robotDirection));
+
+
         if (!Double.isFinite(newY))
         {
             newY = m_robotPositionY + velocity * duration * Math.sin(m_robotDirection);
         }
+
+
         m_robotPositionX = newX;
         m_robotPositionY = newY;
         double newDirection = asNormalizedRadians(m_robotDirection + angularVelocity * duration);
+
+
         m_robotDirection = newDirection;
+    }
+    private boolean unreachable(){
+        double dx = m_targetPositionX - m_robotPositionX;
+        double dy = m_targetPositionY - m_robotPositionY;
+
+        double new_dx = Math.cos(m_robotDirection)*dx + Math.sin(m_robotDirection)*dy;
+        double new_dy = Math.cos(m_robotDirection)*dy - Math.sin(m_robotDirection)*dx;
+
+        double y_center = maxVelocity / maxAngularVelocity;
+        double dist1 = (Math.sqrt(Math.pow((new_dx),2)+Math.pow(new_dy-y_center,2)));
+        double dist2 = (Math.sqrt(Math.pow((new_dx),2)+Math.pow(new_dy+y_center,2)));
+
+        if (dist1 > maxVelocity/maxAngularVelocity && dist2 > maxVelocity / maxAngularVelocity)
+            return false;
+        return true;
     }
 
 }

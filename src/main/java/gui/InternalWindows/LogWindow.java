@@ -6,8 +6,8 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
-import javax.swing.*;
 
+import javax.swing.*;
 import gui.Extends.Configurators.Configurator;
 import gui.Extends.Configurators.Exceptions.InternalFrameLoadException;
 import log.LogChangeListener;
@@ -16,7 +16,7 @@ import log.LogWindowSource;
 
 public class LogWindow extends AbstractSerializableInternalFrame implements LogChangeListener
 {
-  private LogWindowSource m_logSource;
+  protected LogWindowSource m_logSource;
   private TextArea m_logContent;
 
   private final Configurator configurator;

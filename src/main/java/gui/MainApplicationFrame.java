@@ -24,23 +24,13 @@ import gui.InternalWindows.GameLogger;
 import gui.InternalWindows.GameWindow;
 import gui.InternalWindows.LogWindow;
 import log.Logger;
-/*
-    Заставить окна самим сохранять своё состояние.
-    Разные места сохранения окон.
-    Спецификация сохранения.
-    Добавление нового окна.
-
- */
 
 public class MainApplicationFrame extends JFrame
 {
   private final LogWindow logWindow;
   private final GameWindow gameWindow;
-  private final GameLogger gameLogger;
+  private final LogWindow gameLogger;
   private final Localizer localizer = new Localizer(UIManager.getDefaults().getDefaultLocale());
-
-  // Изменять только классы в InternalWindows
-  // Дополнить Abstract класс методами конфигурации
 
   public MainApplicationFrame(LogWindow log, GameWindow game, GameLogger gameLog) {
     int inset = 50;
@@ -55,6 +45,7 @@ public class MainApplicationFrame extends JFrame
     gameWindow = game;
     gameLogger = gameLog;
 
+    game.getModel().addObserver(gameLog);
     localizer.localize();
 
     try {
@@ -77,7 +68,7 @@ public class MainApplicationFrame extends JFrame
           gameLogger.loadConfiguration(desktopPane);
     }catch (InternalFrameLoadException e) {
         gameLogger.setSize(400, 400);
-        gameLogger.setLocation(10,10);
+        gameLogger.setLocation(10,40);
     }
 
 

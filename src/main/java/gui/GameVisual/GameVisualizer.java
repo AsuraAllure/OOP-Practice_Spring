@@ -56,6 +56,16 @@ public class GameVisualizer extends JPanel implements Observer
 
   private void drawRobot(Graphics2D g, int x, int y, double direction)
   {
+    if (x < 0)
+      x = 10;
+    if (y < 0)
+      y = 10;
+    if (x > getWidth())
+      x = getWidth() - 10;
+    if (y > getHeight())
+      y = getHeight() - 10;
+
+
     AffineTransform t = AffineTransform.getRotateInstance(direction, x, y);
     g.setTransform(t);
     g.setColor(Color.MAGENTA);

@@ -1,9 +1,9 @@
 package gui.GameVisual.Position;
 
-public class Positions {
+public class GamePositions {
     public RobotPositions robotPositions;
     public TargetPositions targetPositions;
-    public Positions(RobotPositions rp, TargetPositions tp){
+    public GamePositions(RobotPositions rp, TargetPositions tp){
         robotPositions = rp;
         targetPositions = tp;
     }

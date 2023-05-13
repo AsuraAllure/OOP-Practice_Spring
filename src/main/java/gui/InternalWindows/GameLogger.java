@@ -1,7 +1,7 @@
 package gui.InternalWindows;
 
 import gui.Extends.Configurators.Configurator;
-import gui.GameVisual.Position.Positions;
+import gui.GameVisual.Position.GamePositions;
 import gui.GameVisual.Position.RobotPositions;
 import log.LogEntry;
 import log.LogLevel;
@@ -20,15 +20,15 @@ public class GameLogger extends LogWindow implements Observer {
     }
     @Override
     public void update(Observable observable, Object o) {
-        Positions pos = ((Positions) o);
+        GamePositions pos = ((GamePositions) o);
         if (pos.robotPositions.equals(prevPos) || !mode)
             return;
 
         prevPos = pos.robotPositions;
 
-        String strMessage = "Robot position: "+ pos.robotPositions.x + " "
-                + pos.robotPositions.y + " " + pos.robotPositions.direction +" , Target:"
-                + pos.targetPositions.x + " " + pos.targetPositions.y ;
+        String strMessage = "Robot position: "+ pos.robotPositions.getX() + " "
+                + pos.robotPositions.getY() + " " + pos.robotPositions.getDirection() +" , Target:"
+                + pos.targetPositions.getX() + " " + pos.targetPositions.getY() ;
         m_logSource.append(LogLevel.Debug, strMessage);
     }
     @Override

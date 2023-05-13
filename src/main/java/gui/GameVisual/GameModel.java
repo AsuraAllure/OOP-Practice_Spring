@@ -1,6 +1,6 @@
 package gui.GameVisual;
 
-import gui.GameVisual.Position.Positions;
+import gui.GameVisual.Position.GamePositions;
 import gui.GameVisual.Position.RobotPositions;
 import gui.GameVisual.Position.TargetPositions;
 
@@ -35,7 +35,7 @@ public class GameModel extends Observable {
             {
                 setChanged();
                 notifyObservers(
-                        new Positions(
+                        new GamePositions(
                                 new RobotPositions(
                                         round(m_robotPositionX),
                                         round(m_robotPositionY),

@@ -1,6 +1,6 @@
 package gui.GameVisual;
 
-import gui.GameVisual.Position.Positions;
+import gui.GameVisual.Position.GamePositions;
 
 import java.awt.Color;
 import java.awt.EventQueue;
@@ -16,7 +16,7 @@ import javax.swing.JPanel;
 
 public class GameVisualizer extends JPanel implements Observer
 {
-  private Positions positions;
+  private GamePositions positions;
   public GameVisualizer(GameModel model)
   {
     addMouseListener(new MouseAdapter()
@@ -37,11 +37,11 @@ public class GameVisualizer extends JPanel implements Observer
     Graphics2D g2d = (Graphics2D)g;
     drawRobot(
               g2d,
-              positions.robotPositions.x,
-              positions.robotPositions.y,
-              positions.robotPositions.direction
+              positions.robotPositions.getX(),
+              positions.robotPositions.getY(),
+              positions.robotPositions.getDirection()
     );
-    drawTarget(g2d, positions.targetPositions.x, positions.targetPositions.y);
+    drawTarget(g2d, positions.targetPositions.getX(), positions.targetPositions.getY());
   }
 
   private static void fillOval(Graphics g, int centerX, int centerY, int diam1, int diam2)
@@ -90,7 +90,7 @@ public class GameVisualizer extends JPanel implements Observer
 
   @Override
   public void update(Observable observable, Object o) {
-    positions = (Positions) o;
+    positions = (GamePositions) o;
     EventQueue.invokeLater(this::repaint);
   }
 }

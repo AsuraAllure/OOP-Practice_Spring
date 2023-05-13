@@ -2,10 +2,14 @@ package gui.GameVisual.Position;
 
 import java.util.Objects;
 
-public class RobotPositions {
-    public int x;
-    public int y;
-    public double direction;
+public class RobotPositions extends BasicPositions {
+    protected double direction;
+    public double getDirection(){
+        return direction;
+    }
+    public void setDirection(double d){
+        direction = d;
+    }
 
     @Override
     public boolean equals(Object obj) {

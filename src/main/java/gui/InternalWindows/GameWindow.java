@@ -1,6 +1,7 @@
 package gui.InternalWindows;
 
 import gui.Extends.Configurators.Configurator;
+import gui.Extends.Configurators.ConfiguratorInstance.FileConfigurator;
 import gui.Extends.Configurators.Exceptions.InternalFrameLoadException;
 import gui.GameVisual.GameModel;
 import gui.GameVisual.GameVisualizer;
@@ -13,15 +14,14 @@ import java.io.ObjectOutputStream;
 
 import javax.swing.*;
 
-public class GameWindow extends AbstractSerializableInternalFrame
+public class GameWindow extends FileConfigurator
 {
-  private final Configurator configurator;
   private final GameVisualizer m_visualizer;
   private final GameModel m_model = new GameModel();
-  public GameWindow(Configurator conf)
+  public GameWindow()
   {
-    super("Игровое поле", true, true, true, true);
-    configurator = conf;
+    super("gameFrame", "Игровое поле", true, true, true, true);
+
 
     m_visualizer = new GameVisualizer(m_model);
     m_model.addObserver(m_visualizer);
@@ -56,10 +56,10 @@ public class GameWindow extends AbstractSerializableInternalFrame
   }
   @Override
   public void saveConfiguration() {
-    configurator.saveInternalFrame(this);
+    super.saveInternalFrame();
   }
   @Override
   public void loadConfiguration(JDesktopPane pane) throws InternalFrameLoadException {
-    configurator.loadInternalFrame(pane, this);
+    super.loadInternalFrame(pane);
   }
 }

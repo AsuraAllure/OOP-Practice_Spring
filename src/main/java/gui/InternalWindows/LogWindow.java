@@ -8,27 +8,24 @@ import java.io.ObjectOutputStream;
 
 
 import javax.swing.*;
-import gui.Extends.Configurators.Configurator;
+import gui.Extends.Configurators.ConfiguratorInstance.FileConfigurator;
 import gui.Extends.Configurators.Exceptions.InternalFrameLoadException;
 import log.LogChangeListener;
 import log.LogEntry;
 import log.LogWindowSource;
 
-public class LogWindow extends AbstractSerializableInternalFrame implements LogChangeListener
+public class LogWindow extends FileConfigurator implements LogChangeListener
 {
   protected LogWindowSource m_logSource;
   private TextArea m_logContent;
 
-  private final Configurator configurator;
-  public LogWindow(LogWindowSource logSource, Configurator conf)
-  {
-    super("Протокол работы", true, true, true, true);
+  public LogWindow(LogWindowSource logSource, String filename){
+
+    super(filename, "Протокол работы", true, true, true, true);
     m_logSource = logSource;
     m_logSource.registerListener(this);
     m_logContent = new TextArea("");
     m_logContent.setSize(200, 500);
-
-    configurator = conf;
 
     JPanel panel = new JPanel(new BorderLayout());
     panel.add(m_logContent, BorderLayout.CENTER);
@@ -55,16 +52,6 @@ public class LogWindow extends AbstractSerializableInternalFrame implements LogC
   }
 
   @Override
-  public void save(ObjectOutputStream out) {
-    try {
-      out.writeObject(getSize());
-      out.writeObject(getLocation());
-      out.writeObject(isIcon);
-    }catch (IOException e){
-      e.printStackTrace();
-    }
-  }
-  @Override
   public void load(ObjectInputStream input) {
     try {
       setSize((Dimension) input.readObject());
@@ -77,11 +64,11 @@ public class LogWindow extends AbstractSerializableInternalFrame implements LogC
 
   @Override
   public void saveConfiguration() {
-    configurator.saveInternalFrame(this);
+    super.saveInternalFrame();
   }
 
   @Override
   public void loadConfiguration(JDesktopPane pane) throws InternalFrameLoadException {
-    configurator.loadInternalFrame(pane, this);
+    super.loadInternalFrame(pane);
   }
 }

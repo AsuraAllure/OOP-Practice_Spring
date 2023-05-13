@@ -14,8 +14,8 @@ import java.util.Observer;
 public class GameLogger extends LogWindow implements Observer {
     private boolean mode;
     private RobotPositions prevPos = new RobotPositions(0,0,0);
-    public GameLogger(LogWindowSource logSource, Configurator conf, boolean m) {
-        super(logSource, conf);
+    public GameLogger(LogWindowSource logSource,  boolean m) {
+        super(logSource, "gameLogger");
         mode = m;
     }
     @Override

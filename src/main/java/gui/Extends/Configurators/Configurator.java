@@ -2,8 +2,6 @@ package gui.Extends.Configurators;
 
 
 import gui.Extends.Configurators.Exceptions.InternalFrameLoadException;
-import gui.InternalWindows.AbstractSerializableInternalFrame;
-
 import javax.swing.JDesktopPane;
 
 

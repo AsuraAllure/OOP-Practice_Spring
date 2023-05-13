@@ -1,11 +1,6 @@
 package gui.InternalWindows;
 
 import java.awt.*;
-import java.beans.PropertyVetoException;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-
 
 import javax.swing.*;
 import gui.Extends.Configurators.ConfiguratorInstance.FileConfigurator;
@@ -51,16 +46,6 @@ public class LogWindow extends FileConfigurator implements LogChangeListener
     EventQueue.invokeLater(this::updateLogContent);
   }
 
-  @Override
-  public void load(ObjectInputStream input) {
-    try {
-      setSize((Dimension) input.readObject());
-      setLocation((Point) input.readObject());
-      setIcon((boolean) input.readObject());
-    }catch (IOException | ClassNotFoundException e){
-      e.printStackTrace();
-    }catch (PropertyVetoException ignored){}
-  }
 
   @Override
   public void saveConfiguration() {

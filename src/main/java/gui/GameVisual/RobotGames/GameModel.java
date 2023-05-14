@@ -1,9 +1,10 @@
-package gui.GameVisual;
+package gui.GameVisual.RobotGames;
 
 import gui.Extends.Mathematic.Mathematic;
 import gui.GameVisual.Position.GamePositions;
 import gui.GameVisual.Position.RobotPositions;
 import gui.GameVisual.Position.TargetPositions;
+import gui.GameVisual.RobotGames.Robot;
 
 import java.awt.*;
 import java.util.Observable;
@@ -20,7 +21,7 @@ public class GameModel extends Observable {
     }
     private final TargetPositions targetPositions = new TargetPositions(150, 100);
 
-    private final Robot robot = new Robot(new RobotPositions(100, 100, 0));
+    private final gui.GameVisual.RobotGames.Robot robot = new Robot(new RobotPositions(100, 100, 0));
     public GameModel(){
         m_timer.schedule(new TimerTask()
         {
@@ -53,7 +54,7 @@ public class GameModel extends Observable {
         }, 0, 10);
     }
 
-    protected void setTargetPosition(Point p)
+    public void setTargetPosition(Point p)
     {
         targetPositions.setX(p.x);
         targetPositions.setY(p.y);

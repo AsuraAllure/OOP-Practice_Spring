@@ -1,17 +1,11 @@
 package gui.InternalWindows;
 
-import gui.Extends.Configurators.Configurator;
 import gui.Extends.Configurators.ConfiguratorInstance.FileConfigurator;
-import gui.Extends.Configurators.Exceptions.InternalFrameLoadException;
 import gui.Extends.Localizer.Localizer;
-import gui.GameVisual.GameModel;
-import gui.GameVisual.GameVisualizer;
+import gui.GameVisual.RobotGames.GameModel;
+import gui.GameVisual.RobotGames.GameVisualizer;
 
 import java.awt.*;
-import java.beans.PropertyVetoException;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 
 import javax.swing.*;
 

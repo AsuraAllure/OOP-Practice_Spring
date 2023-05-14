@@ -1,4 +1,4 @@
-package gui.GameVisual;
+package gui.GameVisual.RobotGames;
 
 import gui.GameVisual.Position.RobotPositions;
 

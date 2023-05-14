@@ -1,4 +1,6 @@
-package gui.GameVisual;
+package gui.GameVisual.Sapper;
+
+import gui.GameVisual.Sapper.Enums.GAME_LEVEL;
 
 import java.util.LinkedList;
 import java.util.Queue;
@@ -15,7 +17,7 @@ public class CaperModel {
     public Cell[][] matrix;
     public Cell[][] gametable;
 
-    public CaperModel(int firstDimension, int secondDimension,GAME_LEVEL level ){
+    public CaperModel(int firstDimension, int secondDimension, GAME_LEVEL level ){
         this.firstDimension = firstDimension;
         this.secondDimension = secondDimension;
 
@@ -83,7 +85,7 @@ public class CaperModel {
         return countBomb;
     }
 
-    public Cell[][] touch(int i, int j) throws LooseException, WinException{
+    public Cell[][] touch(int i, int j) throws LooseException, WinException {
         switch (matrix[i][j]){
             case BOMB -> endGame(i, j);
             case FIELD -> openAllClear(i,j);

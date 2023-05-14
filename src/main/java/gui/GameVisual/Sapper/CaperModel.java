@@ -1,5 +1,6 @@
 package gui.GameVisual.Sapper;
 
+import gui.GameVisual.Sapper.Enums.Cell;
 import gui.GameVisual.Sapper.Enums.GAME_LEVEL;
 
 import java.util.LinkedList;
@@ -13,7 +14,6 @@ public class CaperModel {
     private int countBomb;
     private final int firstDimension;
     private final int secondDimension;
-    private enum Cell {BOMB, MARK, FIELD ,CLEAR, ONE, TWO, THREE, FOUR,FIVE, SIX, SEVEN, EIGTH}
     public Cell[][] matrix;
     public Cell[][] gametable;
 

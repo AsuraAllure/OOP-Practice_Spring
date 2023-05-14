@@ -19,7 +19,7 @@ public class CaperWindows extends JInternalFrame
     {
         super("Сапёр", false, false, false, true);
         m_visualizer = new CaperVisualizer(m_model);
-
+        setSize(282, 301);
         JPanel panel = new JPanel(new BorderLayout());
         panel.add(m_visualizer, BorderLayout.CENTER);
         getContentPane().add(panel);

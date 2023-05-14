@@ -14,7 +14,6 @@ public abstract class FileConfigurator extends AbstractSerializableInternalFrame
         super(title, resizable, closable, maximizable, iconifiable);
         this.filename = filename;
     }
-    @Override
     public void loadInternalFrame(JDesktopPane pane)
             throws InternalFrameLoadException {
         pane.add(this);
@@ -35,10 +34,10 @@ public abstract class FileConfigurator extends AbstractSerializableInternalFrame
         this.setVisible(true);
     }
 
-    @Override
     public void saveInternalFrame() {
         try(ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(saveDirectory +"\\"+filename+".txt"))){
             this.save(out);
         } catch (IOException ignored) {}
     }
+
 }

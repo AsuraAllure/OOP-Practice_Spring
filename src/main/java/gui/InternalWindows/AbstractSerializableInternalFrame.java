@@ -33,7 +33,4 @@ abstract public class AbstractSerializableInternalFrame extends JInternalFrame i
         }catch (PropertyVetoException ignored){}
     }
 
-    public abstract void saveConfiguration();
-    public abstract void loadConfiguration(JDesktopPane pane) throws InternalFrameLoadException;
-
 }

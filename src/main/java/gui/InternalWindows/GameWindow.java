@@ -38,12 +38,4 @@ public class GameWindow extends FileConfigurator
     return m_model;
   }
 
-  @Override
-  public void saveConfiguration() {
-    super.saveInternalFrame();
-  }
-  @Override
-  public void loadConfiguration(JDesktopPane pane) throws InternalFrameLoadException {
-    super.loadInternalFrame(pane);
-  }
 }

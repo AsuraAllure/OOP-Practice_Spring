@@ -3,7 +3,7 @@ package gui.GameVisual.Position;
 import java.util.Objects;
 
 public class RobotPositions extends BasicPositions {
-    protected double direction;
+    protected volatile double direction;
     public double getDirection(){
         return direction;
     }

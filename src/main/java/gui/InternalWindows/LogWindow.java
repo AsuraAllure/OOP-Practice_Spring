@@ -4,7 +4,6 @@ import java.awt.*;
 
 import javax.swing.*;
 import gui.Extends.Configurators.ConfiguratorInstance.FileConfigurator;
-import gui.Extends.Configurators.Exceptions.InternalFrameLoadException;
 import gui.Extends.Localizer.Localizer;
 import log.LogChangeListener;
 import log.LogEntry;
@@ -44,21 +43,9 @@ public class LogWindow extends FileConfigurator implements LogChangeListener
   public void localization(Localizer localizer){
     setTitle(localizer.getString("nameLogWindows"));
   }
-
   @Override
   public void onLogChanged()
   {
     EventQueue.invokeLater(this::updateLogContent);
-  }
-
-
-  @Override
-  public void saveConfiguration() {
-    super.saveInternalFrame();
-  }
-
-  @Override
-  public void loadConfiguration(JDesktopPane pane) throws InternalFrameLoadException {
-    super.loadInternalFrame(pane);
   }
 }

@@ -50,7 +50,7 @@ public class MainApplicationFrame extends JFrame
     localizer.localize();
 
     try {
-        logWindow.loadConfiguration(desktopPane);
+        logWindow.loadInternalFrame(desktopPane);
     }catch (InternalFrameLoadException e) {
         logWindow.setSize(400, 400);
         logWindow.setLocation(10,10);
@@ -60,7 +60,7 @@ public class MainApplicationFrame extends JFrame
     Logger.debug("Protocol is working.");
 
     try {
-        game.loadConfiguration(desktopPane);
+        game.loadInternalFrame(desktopPane);
     }catch (InternalFrameLoadException e) {
         gameWindow.setSize(300, 800);
         gameWindow.setLocation(10, 500);
@@ -68,7 +68,7 @@ public class MainApplicationFrame extends JFrame
     gameWindow.localization(localizer);
 
     try {
-          gameLogger.loadConfiguration(desktopPane);
+          gameLogger.loadInternalFrame(desktopPane);
     }catch (InternalFrameLoadException e) {
         gameLogger.setSize(400, 400);
         gameLogger.setLocation(10,40);
@@ -121,9 +121,9 @@ public class MainApplicationFrame extends JFrame
             case JOptionPane.YES_OPTION -> {
                 Logger.debug(localizer.getString("yesExitLogMessage"));
                 setDefaultCloseOperation(EXIT_ON_CLOSE);
-                logWindow.saveConfiguration();
-                gameWindow.saveConfiguration();
-                gameLogger.saveConfiguration();
+                logWindow.saveInternalFrame();
+                gameWindow.saveInternalFrame();
+                gameLogger.saveInternalFrame();
                 dispose();
             }
         }

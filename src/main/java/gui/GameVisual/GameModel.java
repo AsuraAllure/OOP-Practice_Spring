@@ -18,13 +18,12 @@ public class GameModel extends Observable {
         Timer timer = new Timer("events generator", true);
         return timer;
     }
-
     private volatile double m_robotPositionX = 100;
     private volatile double m_robotPositionY = 100;
     private volatile double m_robotDirection = 0;
     private final TargetPositions targetPositions = new TargetPositions(150, 100);
-    private static final double maxVelocity = 0.1;
-    private static final double maxAngularVelocity = 0.001;
+
+    private final Robot robot = new Robot(new RobotPositions(100, 100, 0));
     public GameModel(){
         m_timer.schedule(new TimerTask()
         {
@@ -40,8 +39,8 @@ public class GameModel extends Observable {
                                         m_robotDirection
                                 ),
                                 new TargetPositions(
-                                        targetPositions.getX(),
-                                        targetPositions.getY()
+                                        (int) Math.round(targetPositions.getX()),
+                                        (int) Math.round(targetPositions.getY())
                                 )
                         )
                 );
@@ -69,20 +68,20 @@ public class GameModel extends Observable {
         double angularVelocity = 0;
 
         if (angleToTarget - m_robotDirection > Math.PI){
-            angularVelocity = -maxAngularVelocity;
+            angularVelocity = -robot.getMaxAngularVelocity();
         }
 
         if (angleToTarget - m_robotDirection < -Math.PI){
-            angularVelocity = maxAngularVelocity;
+            angularVelocity = robot.getMaxAngularVelocity();
         }
 
         if (angleToTarget - m_robotDirection < Math.PI && angleToTarget - m_robotDirection >=0)
         {
-            angularVelocity = maxAngularVelocity;
+            angularVelocity = robot.getMaxAngularVelocity();
         }
 
         if (angleToTarget - m_robotDirection < 0 && angleToTarget - m_robotDirection >=-Math.PI){
-            angularVelocity = -maxAngularVelocity;
+            angularVelocity = -robot.getMaxAngularVelocity();
         }
 
         return angularVelocity;
@@ -96,7 +95,7 @@ public class GameModel extends Observable {
         {
             return;
         }
-        double velocity = maxVelocity;
+        double velocity = robot.getMaxVelocity();
         double angleToTarget = Mathematic.angleTo(m_robotPositionX, m_robotPositionY, targetPositions.getX(), targetPositions.getY());
         double angularVelocity = calculateAngularVelocity(angleToTarget);
 
@@ -108,8 +107,8 @@ public class GameModel extends Observable {
 
     private void moveRobot(double velocity, double angularVelocity, double duration)
     {
-        velocity = Mathematic.applyLimits(velocity, 0, maxVelocity);
-        angularVelocity = Mathematic.applyLimits(angularVelocity, -maxAngularVelocity, maxAngularVelocity);
+        velocity = Mathematic.applyLimits(velocity, 0, robot.getMaxVelocity());
+        angularVelocity = Mathematic.applyLimits(angularVelocity, -robot.getMaxAngularVelocity(), robot.getMaxAngularVelocity());
 
 
         double newX = m_robotPositionX + (velocity / angularVelocity) *
@@ -144,11 +143,11 @@ public class GameModel extends Observable {
         double new_dx = Math.cos(m_robotDirection)*dx + Math.sin(m_robotDirection)*dy;
         double new_dy = Math.cos(m_robotDirection)*dy - Math.sin(m_robotDirection)*dx;
 
-        double y_center = maxVelocity / maxAngularVelocity;
+        double y_center = robot.getMaxVelocity() / robot.getMaxAngularVelocity();
         double dist1 = (Math.sqrt(Math.pow((new_dx),2)+Math.pow(new_dy-y_center,2)));
         double dist2 = (Math.sqrt(Math.pow((new_dx),2)+Math.pow(new_dy+y_center,2)));
 
-        return !(dist1 > maxVelocity / maxAngularVelocity) || !(dist2 > maxVelocity / maxAngularVelocity);
+        return !(dist1 > robot.getMaxVelocity() / robot.getMaxAngularVelocity())
+                || !(dist2 > robot.getMaxVelocity() / robot.getMaxAngularVelocity());
     }
-
 }

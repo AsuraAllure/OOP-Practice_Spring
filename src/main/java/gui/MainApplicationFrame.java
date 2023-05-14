@@ -6,6 +6,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.event.ActionEvent;
+import java.util.*;
 
 import javax.swing.JDesktopPane;
 import javax.swing.JFrame;
@@ -54,6 +55,7 @@ public class MainApplicationFrame extends JFrame
         logWindow.setSize(400, 400);
         logWindow.setLocation(10,10);
     }
+    logWindow.localization(localizer);
 
     Logger.debug("Protocol is working.");
 
@@ -63,6 +65,7 @@ public class MainApplicationFrame extends JFrame
         gameWindow.setSize(300, 800);
         gameWindow.setLocation(10, 500);
     }
+    gameWindow.localization(localizer);
 
     try {
           gameLogger.loadConfiguration(desktopPane);
@@ -70,8 +73,7 @@ public class MainApplicationFrame extends JFrame
         gameLogger.setSize(400, 400);
         gameLogger.setLocation(10,40);
     }
-
-
+    gameLogger.localization(localizer);
 
     setJMenuBar(generateMenuBar());
     addWindowListener(new WindowAdapter() {
@@ -90,6 +92,7 @@ public class MainApplicationFrame extends JFrame
     menuBar.add(menuBuilder.createLookAndViewMenu());
     menuBar.add(menuBuilder.createTestMenu());
     menuBar.add(menuBuilder.createExitMenu());
+    menuBar.add(menuBuilder.createChangeLanguageMenu());
     return menuBar;
   }
 
@@ -125,8 +128,47 @@ public class MainApplicationFrame extends JFrame
             }
         }
     }
+
+    private void localization(Locale l){
+      localizer.changeLocale(l);
+      localizer.localize();
+
+      JMenuBar bar = getJMenuBar();
+      bar.getMenu(0).setText(localizer.getString("lookAndFeelMenuName"));
+      bar.getMenu(0).getItem(0).setText(localizer.getString("systemLookAndFeelMenuItemName"));
+      bar.getMenu(0).getItem(1).setText(localizer.getString("universalLookAndFeelMenuItemName"));
+      bar.getMenu(1).setText(localizer.getString("testMenuName"));
+      bar.getMenu(1).getItem(0).setText(localizer.getString("logMessageMenuItemName"));
+      bar.getMenu(2).setText(localizer.getString("closeMenuName"));
+      bar.getMenu(2).getItem(0).setText(localizer.getString("closeMenuItemName"));
+      bar.getMenu(3).setText(localizer.getString("changeLanguageMenuName"));
+      bar.getMenu(3).getItem(0).setText(localizer.getString("russianLanguageItem"));
+      bar.getMenu(3).getItem(1).setText(localizer.getString("translitLanguageItem"));
+
+      gameLogger.localization(localizer);
+      logWindow.localization(localizer);
+      gameWindow.localization(localizer);
+    }
     private class MenuBuilder {
-        private MenuBuilder() {}
+      private MenuBuilder() {}
+        private JMenu createChangeLanguageMenu(){
+
+            JMenu changeLanguageMenu = new JMenu(localizer.getString("changeLanguageMenuName"));
+            changeLanguageMenu.getAccessibleContext().setAccessibleDescription(localizer.getString("changeLanguageMenuName"));
+            JMenuItem russianLanguageItem = new JMenuItem(localizer.getString("russianLanguageItem"));
+            JMenuItem translitLanguageItem = new JMenuItem(localizer.getString("translitLanguageItem"));
+            changeLanguageMenu.add(russianLanguageItem);
+            changeLanguageMenu.add(translitLanguageItem);
+            russianLanguageItem.addActionListener((event) -> {
+                Logger.debug("Change language: russian");
+                MainApplicationFrame.this.localization(new Locale("ru"));
+            });
+            translitLanguageItem.addActionListener((event) -> {
+                Logger.debug("Change language: transliteration");
+                MainApplicationFrame.this.localization(new Locale("zh"));
+            });
+            return changeLanguageMenu;
+        }
         private JMenu createExitMenu()
         {
             JMenu closeMenu = new JMenu(localizer.getString("closeMenuName"));

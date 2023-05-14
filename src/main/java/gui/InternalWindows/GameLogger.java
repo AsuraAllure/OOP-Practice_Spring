@@ -1,5 +1,6 @@
 package gui.InternalWindows;
 
+import gui.Extends.Localizer.Localizer;
 import gui.GameVisual.Position.GamePositions;
 import gui.GameVisual.Position.RobotPositions;
 
@@ -30,4 +31,7 @@ public class GameLogger extends LogWindow implements Observer {
         m_logSource.append(LogLevel.Debug, strMessage);
     }
 
+    public void localization(Localizer localizer){
+        setTitle(localizer.getString("nameGameLogger"));
+    }
 }

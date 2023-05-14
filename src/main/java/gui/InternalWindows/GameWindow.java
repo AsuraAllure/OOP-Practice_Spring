@@ -3,6 +3,7 @@ package gui.InternalWindows;
 import gui.Extends.Configurators.Configurator;
 import gui.Extends.Configurators.ConfiguratorInstance.FileConfigurator;
 import gui.Extends.Configurators.Exceptions.InternalFrameLoadException;
+import gui.Extends.Localizer.Localizer;
 import gui.GameVisual.GameModel;
 import gui.GameVisual.GameVisualizer;
 
@@ -29,6 +30,9 @@ public class GameWindow extends FileConfigurator
     JPanel panel = new JPanel(new BorderLayout());
     panel.add(m_visualizer, BorderLayout.CENTER);
     getContentPane().add(panel);
+  }
+  public void localization(Localizer localizer){
+    setTitle(localizer.getString("nameGameWindows"));
   }
   public GameModel getModel(){
     return m_model;

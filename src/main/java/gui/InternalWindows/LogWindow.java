@@ -5,6 +5,7 @@ import java.awt.*;
 import javax.swing.*;
 import gui.Extends.Configurators.ConfiguratorInstance.FileConfigurator;
 import gui.Extends.Configurators.Exceptions.InternalFrameLoadException;
+import gui.Extends.Localizer.Localizer;
 import log.LogChangeListener;
 import log.LogEntry;
 import log.LogWindowSource;
@@ -38,6 +39,10 @@ public class LogWindow extends FileConfigurator implements LogChangeListener
     }
     m_logContent.setText(content.toString());
     m_logContent.invalidate();
+  }
+
+  public void localization(Localizer localizer){
+    setTitle(localizer.getString("nameLogWindows"));
   }
 
   @Override

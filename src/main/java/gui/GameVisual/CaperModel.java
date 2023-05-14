@@ -3,10 +3,14 @@ package gui.GameVisual;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Random;
+import java.util.Scanner;
 
 public class CaperModel {
-    private int firstDimension;
-    private int secondDimension;
+
+    private int flag;
+    private int countBomb;
+    private final int firstDimension;
+    private final int secondDimension;
     private enum Cell {BOMB, MARK, FIELD ,CLEAR, ONE, TWO, THREE, FOUR,FIVE, SIX, SEVEN, EIGTH}
     public Cell[][] matrix;
     public Cell[][] gametable;
@@ -71,14 +75,15 @@ public class CaperModel {
         }
     }
     private int getCountBomb(GAME_LEVEL level){
-        return switch (level){
+        countBomb = switch (level){
             case EASY -> (int)Math.round(firstDimension * secondDimension * 0.15);
             case MEDIUM ->(int)Math.round(firstDimension * secondDimension * 0.25);
             case HARD -> (int)Math.round(firstDimension * secondDimension * 0.35);
         };
+        return countBomb;
     }
 
-    public void touch(int i, int j){
+    public Cell[][] touch(int i, int j) throws LooseException, WinException{
         switch (matrix[i][j]){
             case BOMB -> endGame(i, j);
             case FIELD -> openAllClear(i,j);
@@ -86,6 +91,26 @@ public class CaperModel {
             default -> gametable[i][j] = matrix[i][j];
         }
 
+        int countFields = 0;
+        if (matrix[i][j] != Cell.BOMB)
+            countFields = calcFields();
+        else
+            throw new LooseException();
+
+        if (countFields == countBomb)
+            throw new WinException();
+
+
+        return gametable;
+    }
+
+    private int calcFields(){
+        int cF = 0;
+        for(int i = 0; i < firstDimension; i++)
+            for(int j = 0; j < secondDimension; j++)
+                if (gametable[i][j] == Cell.FIELD)
+                    cF += 1;
+        return cF;
     }
     private void openAllClear(int i, int j){
         Queue<Integer> fIndex = new LinkedList<>();
@@ -114,97 +139,36 @@ public class CaperModel {
     }
     private void endGame(int i, int j){
         gametable[i][j] = Cell.BOMB;
-        System.out.println("GAME OVER");
     }
     public void print_table(){
-        for(int i = 0; i < 9; i++){
-            for(int j = 0; j < 9; j++) {
-                System.out.print(matrix[i][j]);
-                System.out.print("  ");
-            }
-            System.out.println("");}
-
-        System.out.println("Game");
-        for(int i = 0; i < 9; i++){
-            for(int j = 0; j < 9; j++) {
+        for(int i = 0; i < firstDimension; i++){
+            for(int j = 0; j < secondDimension; j++) {
                 System.out.print(gametable[i][j]);
                 System.out.print("  ");
             }
-
             System.out.println("");}
+        System.out.println("");
     }
 
-    public static void main(String[] args){
-        CaperModel cp = new CaperModel(9,9, GAME_LEVEL.HARD);
-        cp.print_table();
-        cp.touch(0,0);
-        System.out.println("asd");
-        cp.print_table();
-
-
-    }
-    /*
-    protected void onModelUpdateEvent()
-    {
-        double distance = Mathematic.distance(targetPositions.getX(), targetPositions.getY(),
-                m_robotPositionX, m_robotPositionY);
-        if (distance < 0.5)
-        {
+    public static void main(String[] args) {
+        CaperModel cp = new CaperModel(4, 4, GAME_LEVEL.EASY);
+        Scanner in = new Scanner(System.in);
+        int x;
+        int y;
+        Cell[][] table;
+        do{
+        x = in.nextInt();
+        y = in.nextInt();
+        try {
+            table = cp.touch(x, y);
+        }catch (WinException e){
+            System.out.println("win");
+            return;
+        }catch (LooseException e){
+            System.out.println("loose");
             return;
         }
-        double velocity = maxVelocity;
-        double angleToTarget = Mathematic.angleTo(m_robotPositionX, m_robotPositionY, targetPositions.getX(), targetPositions.getY());
-        double angularVelocity = calculateAngularVelocity(angleToTarget);
-
-        if (unreachable()) {
-            angularVelocity = 0;
-        }
-        moveRobot(velocity, angularVelocity, 10);
+        cp.print_table();
+        }while(table[x][y] != Cell.BOMB);
     }
-
-    private void moveRobot(double velocity, double angularVelocity, double duration)
-    {
-        velocity = Mathematic.applyLimits(velocity, 0, maxVelocity);
-        angularVelocity = Mathematic.applyLimits(angularVelocity, -maxAngularVelocity, maxAngularVelocity);
-
-
-        double newX = m_robotPositionX + (velocity / angularVelocity) *
-                (Math.sin(m_robotDirection  + angularVelocity * duration) - Math.sin(m_robotDirection));
-
-
-        if (!Double.isFinite(newX))
-        {
-            newX = m_robotPositionX + velocity * duration * Math.cos(m_robotDirection);
-        }
-
-        double newY = m_robotPositionY - velocity / angularVelocity *
-                (Math.cos(m_robotDirection  + angularVelocity * duration) - Math.cos(m_robotDirection));
-
-
-        if (!Double.isFinite(newY))
-        {
-            newY = m_robotPositionY + velocity * duration * Math.sin(m_robotDirection);
-        }
-
-
-        m_robotPositionX = newX;
-        m_robotPositionY = newY;
-        double newDirection = Mathematic.asNormalizedRadians(m_robotDirection + angularVelocity * duration);
-
-        m_robotDirection = newDirection;
-    }
-    private boolean unreachable(){
-        double dx = targetPositions.getX() - m_robotPositionX;
-        double dy = targetPositions.getY() - m_robotPositionY;
-
-        double new_dx = Math.cos(m_robotDirection)*dx + Math.sin(m_robotDirection)*dy;
-        double new_dy = Math.cos(m_robotDirection)*dy - Math.sin(m_robotDirection)*dx;
-
-        double y_center = maxVelocity / maxAngularVelocity;
-        double dist1 = (Math.sqrt(Math.pow((new_dx),2)+Math.pow(new_dy-y_center,2)));
-        double dist2 = (Math.sqrt(Math.pow((new_dx),2)+Math.pow(new_dy+y_center,2)));
-
-        return !(dist1 > maxVelocity / maxAngularVelocity) || !(dist2 > maxVelocity / maxAngularVelocity);
-    }
-*/
 }

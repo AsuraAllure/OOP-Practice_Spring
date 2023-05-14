@@ -18,9 +18,6 @@ public class GameModel extends Observable {
         Timer timer = new Timer("events generator", true);
         return timer;
     }
-    private volatile double m_robotPositionX = 100;
-    private volatile double m_robotPositionY = 100;
-    private volatile double m_robotDirection = 0;
     private final TargetPositions targetPositions = new TargetPositions(150, 100);
 
     private final Robot robot = new Robot(new RobotPositions(100, 100, 0));
@@ -34,9 +31,9 @@ public class GameModel extends Observable {
                 notifyObservers(
                         new GamePositions(
                                 new RobotPositions(
-                                        (int) Math.round(m_robotPositionX),
-                                        (int) Math.round(m_robotPositionY),
-                                        m_robotDirection
+                                        (int) Math.round(robot.robotPositions.getX()),
+                                        (int) Math.round(robot.robotPositions.getY()),
+                                        robot.robotPositions.getDirection()
                                 ),
                                 new TargetPositions(
                                         (int) Math.round(targetPositions.getX()),
@@ -67,20 +64,21 @@ public class GameModel extends Observable {
 
         double angularVelocity = 0;
 
-        if (angleToTarget - m_robotDirection > Math.PI){
+
+        if (angleToTarget - robot.robotPositions.getDirection() > Math.PI){
             angularVelocity = -robot.getMaxAngularVelocity();
         }
 
-        if (angleToTarget - m_robotDirection < -Math.PI){
+        if (angleToTarget - robot.robotPositions.getDirection() < -Math.PI){
             angularVelocity = robot.getMaxAngularVelocity();
         }
 
-        if (angleToTarget - m_robotDirection < Math.PI && angleToTarget - m_robotDirection >=0)
+        if (angleToTarget - robot.robotPositions.getDirection() < Math.PI && angleToTarget - robot.robotPositions.getDirection() >=0)
         {
             angularVelocity = robot.getMaxAngularVelocity();
         }
 
-        if (angleToTarget - m_robotDirection < 0 && angleToTarget - m_robotDirection >=-Math.PI){
+        if (angleToTarget - robot.robotPositions.getDirection() < 0 && angleToTarget - robot.robotPositions.getDirection() >=-Math.PI){
             angularVelocity = -robot.getMaxAngularVelocity();
         }
 
@@ -90,13 +88,13 @@ public class GameModel extends Observable {
     protected void onModelUpdateEvent()
     {
         double distance = Mathematic.distance(targetPositions.getX(), targetPositions.getY(),
-                m_robotPositionX, m_robotPositionY);
+                robot.robotPositions.getX(),robot.robotPositions.getY());
         if (distance < 0.5)
         {
             return;
         }
         double velocity = robot.getMaxVelocity();
-        double angleToTarget = Mathematic.angleTo(m_robotPositionX, m_robotPositionY, targetPositions.getX(), targetPositions.getY());
+        double angleToTarget = Mathematic.angleTo(robot.robotPositions.getX(), robot.robotPositions.getY(), targetPositions.getX(), targetPositions.getY());
         double angularVelocity = calculateAngularVelocity(angleToTarget);
 
         if (unreachable()) {
@@ -111,37 +109,37 @@ public class GameModel extends Observable {
         angularVelocity = Mathematic.applyLimits(angularVelocity, -robot.getMaxAngularVelocity(), robot.getMaxAngularVelocity());
 
 
-        double newX = m_robotPositionX + (velocity / angularVelocity) *
-                (Math.sin(m_robotDirection  + angularVelocity * duration) - Math.sin(m_robotDirection));
+        double newX = robot.robotPositions.getX() + (velocity / angularVelocity) *
+                (Math.sin(robot.robotPositions.getDirection()  + angularVelocity * duration) - Math.sin(robot.robotPositions.getDirection()));
 
 
         if (!Double.isFinite(newX))
         {
-            newX = m_robotPositionX + velocity * duration * Math.cos(m_robotDirection);
+            newX = robot.robotPositions.getX() + velocity * duration * Math.cos(robot.robotPositions.getDirection());
         }
 
-        double newY = m_robotPositionY - velocity / angularVelocity *
-                (Math.cos(m_robotDirection  + angularVelocity * duration) - Math.cos(m_robotDirection));
+        double newY = robot.robotPositions.getY() - velocity / angularVelocity *
+                (Math.cos(robot.robotPositions.getDirection()  + angularVelocity * duration) - Math.cos(robot.robotPositions.getDirection()));
 
 
         if (!Double.isFinite(newY))
         {
-            newY = m_robotPositionY + velocity * duration * Math.sin(m_robotDirection);
+            newY = robot.robotPositions.getY() + velocity * duration * Math.sin(robot.robotPositions.getDirection());
         }
 
 
-        m_robotPositionX = newX;
-        m_robotPositionY = newY;
-        double newDirection = Mathematic.asNormalizedRadians(m_robotDirection + angularVelocity * duration);
+        robot.robotPositions.setX( newX);
+        robot.robotPositions.setY(newY);
+        double newDirection = Mathematic.asNormalizedRadians(robot.robotPositions.getDirection() + angularVelocity * duration);
 
-        m_robotDirection = newDirection;
+        robot.robotPositions.setDirection( newDirection);
     }
     private boolean unreachable(){
-        double dx = targetPositions.getX() - m_robotPositionX;
-        double dy = targetPositions.getY() - m_robotPositionY;
+        double dx = targetPositions.getX() - robot.robotPositions.getX();
+        double dy = targetPositions.getY() - robot.robotPositions.getY();
 
-        double new_dx = Math.cos(m_robotDirection)*dx + Math.sin(m_robotDirection)*dy;
-        double new_dy = Math.cos(m_robotDirection)*dy - Math.sin(m_robotDirection)*dx;
+        double new_dx = Math.cos(robot.robotPositions.getDirection())*dx + Math.sin(robot.robotPositions.getDirection())*dy;
+        double new_dy = Math.cos(robot.robotPositions.getDirection())*dy - Math.sin(robot.robotPositions.getDirection())*dx;
 
         double y_center = robot.getMaxVelocity() / robot.getMaxAngularVelocity();
         double dist1 = (Math.sqrt(Math.pow((new_dx),2)+Math.pow(new_dy-y_center,2)));

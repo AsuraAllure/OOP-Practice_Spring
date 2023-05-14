@@ -1,5 +1,7 @@
 package gui;
 
+import gui.GameVisual.CaperModel;
+import gui.InternalWindows.CaperWindow;
 import gui.InternalWindows.GameLogger;
 import gui.InternalWindows.GameWindow;
 import gui.InternalWindows.LogWindow;
@@ -27,7 +29,8 @@ public class RobotsProgram
       MainApplicationFrame frame = new MainApplicationFrame(
               new LogWindow(Logger.getDefaultLogSource(), "logFrame"),
               new GameWindow(),
-              new GameLogger(new LogWindowSource(100), false)
+              new GameLogger(new LogWindowSource(100), false),
+              new CaperWindow()
       );
       frame.pack();
       frame.setVisible(true);

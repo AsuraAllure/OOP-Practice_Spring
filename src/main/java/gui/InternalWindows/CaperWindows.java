@@ -1,14 +1,13 @@
 package gui.InternalWindows;
 
 import gui.Extends.Localizer.Localizer;
-import gui.GameVisual.CaperModel;
-import gui.GameVisual.CaperVisualizer;
 import gui.GameVisual.Sapper.CaperModel;
+import gui.GameVisual.Sapper.CaperVisualizer;
 import gui.GameVisual.Sapper.Enums.GAME_LEVEL;
 
 
 import java.awt.*;
-import java.util.logging.Level;
+
 
 import javax.swing.*;
 
@@ -16,11 +15,9 @@ public class CaperWindows extends JInternalFrame
 {
     private final CaperVisualizer m_visualizer;
     private final CaperModel m_model = new CaperModel(9, 9, GAME_LEVEL.EASY);
-    public CaperWindow()
+    public CaperWindows()
     {
         super("Сапёр", false, false, false, true);
-
-
         m_visualizer = new CaperVisualizer(m_model);
 
         JPanel panel = new JPanel(new BorderLayout());

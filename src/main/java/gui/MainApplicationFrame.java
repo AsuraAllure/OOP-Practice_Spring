@@ -21,6 +21,7 @@ import javax.swing.KeyStroke;
 
 import gui.Extends.Configurators.Exceptions.InternalFrameLoadException;
 import gui.Extends.Localizer.Localizer;
+import gui.InternalWindows.CaperWindows;
 import gui.InternalWindows.GameLogger;
 import gui.InternalWindows.GameWindow;
 import gui.InternalWindows.LogWindow;
@@ -33,7 +34,7 @@ public class MainApplicationFrame extends JFrame
   private final LogWindow gameLogger;
   private final Localizer localizer = new Localizer(UIManager.getDefaults().getDefaultLocale());
 
-  public MainApplicationFrame(LogWindow log, GameWindow game, GameLogger gameLog) {
+  public MainApplicationFrame(LogWindow log, GameWindow game, GameLogger gameLog, CaperWindows caper) {
     int inset = 50;
     Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
     setBounds(inset, inset,
@@ -45,6 +46,9 @@ public class MainApplicationFrame extends JFrame
     logWindow = log;
     gameWindow = game;
     gameLogger = gameLog;
+
+    desktopPane.add(caper);
+    caper.setVisible(true);
 
     game.getModel().addObserver(gameLog);
     localizer.localize();

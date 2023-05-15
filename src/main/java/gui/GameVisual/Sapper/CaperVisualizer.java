@@ -96,10 +96,10 @@ public class CaperVisualizer extends JPanel  {
 
     }
     public void drawclearComponent(Graphics2D g2d, int x, int y){
-        g2d.setColor(Color.GREEN);
+        g2d.setColor(Color.lightGray);
         g2d.fillRect(x-12,y-15, 30, 30);
-        g2d.drawRect(x-12, y-15, 30, 30);
         g2d.setColor(Color.BLACK);
+        g2d.drawRect(x-12, y-15, 30, 30);
     }
     public void drawComponent(Graphics2D g2d, int x, int y){
         g2d.fillOval(x,y, 10, 10);

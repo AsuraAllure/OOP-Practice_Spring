@@ -9,8 +9,6 @@ import java.util.Random;
 import java.util.Scanner;
 
 public class CaperModel {
-
-    private int flag;
     private int countBomb;
     private final int firstDimension;
     private final int secondDimension;
@@ -136,7 +134,8 @@ public class CaperModel {
                         if (matrix[x][y] == Cell.FIELD) {
                             fIndex.add(x);
                             sIndex.add(y);
-                        }
+                        }else
+                            gametable[x][y] = matrix[x][y];
         }
     }
     private void endGame(int i, int j){

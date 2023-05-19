@@ -1,9 +1,11 @@
 package gui.GameVisual.Sapper.Visualizers;
 
+import gui.GameVisual.Sapper.Enums.GameState;
 import gui.GameVisual.Sapper.Exception.LooseException;
 import gui.GameVisual.Sapper.Exception.WinException;
 import gui.GameVisual.Sapper.GameField.RectangleGameField;
 import gui.GameVisual.Sapper.Models.RectangleSapperModel;
+import gui.GameVisual.Sapper.Models.SapperModel;
 import log.Logger;
 
 import java.awt.Color;
@@ -15,32 +17,59 @@ import java.awt.event.MouseEvent;
 import javax.swing.*;
 
 
-public class RectangleSapperVisualizer extends JPanel implements SapperVisualizer {
-    private RectangleGameField curTable = new RectangleGameField(9, 9);
+public class RectangleSapperVisualizer extends AbstractSapperVisualizer {
+    private RectangleGameField curTable;
+
+    private RectangleSapperModel model;
+    private int totalWidthWindow;
+    private int totalHeightWindow;
+    private int cellWidth;
+    private int cellHeight;
+
+    private GameState state;
+
+
+    private void setWindowSize(int x, int y){
+        totalHeightWindow = x;
+        totalWidthWindow = y;
+
+        cellWidth = totalWidthWindow / model.getGameTable().getFirstDimension();
+        cellHeight = totalHeightWindow / model.getGameTable().getSecondDimension();
+    }
 
     public RectangleSapperVisualizer(RectangleSapperModel model) {
+        this.model = model;
+        state = GameState.PLAY;
+        setWindowSize(270, 270);
+
         addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                int x  = e.getX() / 30;
-                int y = e.getY() / 30;
+                int x  = e.getX() / cellWidth;
+                int y = e.getY() / cellHeight;
+
+                if (state != GameState.PLAY)
+                    return;
 
                 try {
                     if (SwingUtilities.isLeftMouseButton(e))
                         curTable = model.touch(x, y);
                     else
                         curTable = model.mark(x, y);
-                    repaint();
                 }catch (WinException winException){
-                    repaint();
+                    state = GameState.WIN;
                     Logger.debug("Вы выйграли");
                 }catch (LooseException looseException){
-                    repaint();
+                    state = GameState.LOSE;
                     Logger.debug("Вы проиграли");
                 }
-
+                repaint();
             }
         });
+
+
+
+        curTable = model.getGameTable();
         setDoubleBuffered(true);
     }
 
@@ -50,13 +79,13 @@ public class RectangleSapperVisualizer extends JPanel implements SapperVisualize
     {
         super.paint(g);
         Graphics2D g2d = (Graphics2D)g;
-        drawField(g2d, 270, 270);
-        for(int i=0; i < 9; i++)
-            for(int j=0; j < 9; j++){
-                int posX = i * 30 + 12;
-                int posY = j * 30 + 15;
+        drawField(g2d);
+        for(int i=0; i < model.getGameTable().getFirstDimension(); i++)
+            for(int j=0; j < model.getGameTable().getSecondDimension(); j++){
+                int posX = i * cellWidth + cellWidth / 2;
+                int posY = j * cellHeight + cellHeight / 2;
                 switch (curTable.get(i, j)){
-                    case BOMB -> drawComponent(g2d, posX-2, posY-5);
+                    case BOMB -> drawComponent(g2d, posX, posY);
                     case CLEAR -> drawClearComponent(g2d,posX, posY);
                     case ONE -> drawNum(g2d, posX, posY, "1");
                     case TWO -> drawNum(g2d, posX, posY, "2");
@@ -73,30 +102,36 @@ public class RectangleSapperVisualizer extends JPanel implements SapperVisualize
 
     public void drawMark(Graphics2D g2d, int posX, int posY){
         g2d.setColor(Color.RED);
-        g2d.fillRect(posX-12, posY-15, 30, 30);
+        g2d.fillRect(posX - cellWidth / 2, posY - cellHeight / 2, cellWidth, cellHeight);
         g2d.setColor(Color.BLACK);
-        g2d.drawRect(posX-12, posY-15, 30, 30);
+        g2d.drawRect(posX - cellWidth / 2, posY - cellHeight / 2, cellWidth, cellHeight);
     }
-    public void drawField(Graphics2D g2d, int width, int height){
+    public void drawField(Graphics2D g2d){
         g2d.setBackground(Color.lightGray);
-        for (int i = 1; i < 9; i++){
-            g2d.drawLine(0, 30*i, 270, 30*i);
-            g2d.drawLine(30*i, 0 , 30*i, 270);
+        for (int i = 1; i < model.getGameTable().getFirstDimension() ; i++){
+            g2d.drawLine(0, cellWidth*i, totalWidthWindow, cellWidth*i);
+        }
+        for (int i = 1; i < model.getGameTable().getSecondDimension() ; i++){
+            g2d.drawLine(cellHeight*i, 0 , cellHeight*i, totalHeightWindow);
         }
 
     }
     public void drawClearComponent(Graphics2D g2d, int x, int y){
         g2d.setColor(Color.lightGray);
-        g2d.fillRect(x-12,y-15, 30, 30);
+        g2d.fillRect(x - cellWidth/2, y - cellHeight/2, 30, 30);
         g2d.setColor(Color.BLACK);
-        g2d.drawRect(x-12, y-15, 30, 30);
+        g2d.drawRect(x - cellWidth/2, y - cellHeight/2, 30, 30);
     }
     public void drawComponent(Graphics2D g2d, int x, int y){
-        g2d.fillOval(x,y, 10, 10);
-        g2d.drawOval(x,y,10,10);
+        g2d.fillOval(x - cellWidth/4, y - cellHeight/4 , 10, 10);
+        g2d.drawOval(x - cellWidth/4, y - cellHeight/4, 10,10);
     }
     public void drawNum(Graphics2D g2d, int x, int y, String value){
-        g2d.drawString(value, x , y);
+        g2d.drawString(value, x- cellWidth/8 , y+cellHeight/8);
     }
 
+    @Override
+    public void updateModel(SapperModel m) {
+        this.model = (RectangleSapperModel) m;
+    }
 }

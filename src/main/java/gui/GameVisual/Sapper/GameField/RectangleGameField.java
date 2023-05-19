@@ -17,7 +17,13 @@ public class RectangleGameField implements GameField{
             }
     }
 
-    public int getSize(){
+    public int getFirstDimension(){
+        return firstDimension;
+    }
+    public int getSecondDimension(){
+        return secondDimension;
+    }
+    public int getCountCell(){
         return firstDimension * secondDimension;
     }
     protected boolean checkBorder(int x, int y){

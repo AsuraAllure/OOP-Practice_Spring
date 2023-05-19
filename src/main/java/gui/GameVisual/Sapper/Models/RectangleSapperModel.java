@@ -19,7 +19,9 @@ public class RectangleSapperModel implements SapperModel{
         gameTable = pl;
         masterField = mas;
     }
-
+    public RectangleGameField getGameTable(){
+        return gameTable;
+    }
 
     public RectangleGameField mark(int i, int j){
         switch (gameTable.get(i, j)) {
@@ -35,7 +37,7 @@ public class RectangleSapperModel implements SapperModel{
             default -> gameTable.set(i, j, masterField.get(i, j));
         }
 
-        if (gameTable.getSize() - gameTable.getCountOpened() == masterField.getCountBomb())
+        if (gameTable.getCountCell() - gameTable.getCountOpened() == masterField.getCountBomb())
             throw new WinException();
 
         return gameTable;

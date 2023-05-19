@@ -21,6 +21,11 @@ import javax.swing.KeyStroke;
 
 import gui.Extends.Configurators.Exceptions.InternalFrameLoadException;
 import gui.Extends.Localizer.Localizer;
+import gui.GameVisual.Sapper.Enums.GAME_LEVEL;
+import gui.GameVisual.Sapper.GameField.MasterRectangleGameField;
+import gui.GameVisual.Sapper.GameField.PlayerRectangleGameField;
+import gui.GameVisual.Sapper.Models.RectangleSapperModel;
+import gui.GameVisual.Sapper.Visualizers.RectangleSapperVisualizer;
 import gui.InternalWindows.SapperWindows;
 import gui.InternalWindows.GameLogger;
 import gui.InternalWindows.GameWindow;
@@ -34,7 +39,7 @@ public class MainApplicationFrame extends JFrame
   private final LogWindow gameLogger;
   private final Localizer localizer = new Localizer(UIManager.getDefaults().getDefaultLocale());
 
-  public MainApplicationFrame(LogWindow log, GameWindow game, GameLogger gameLog, SapperWindows caper) {
+  public MainApplicationFrame(LogWindow log, GameWindow game, GameLogger gameLog) {
     int inset = 50;
     Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
     setBounds(inset, inset,
@@ -42,6 +47,15 @@ public class MainApplicationFrame extends JFrame
         screenSize.height - inset*2);
     JDesktopPane desktopPane = new JDesktopPane();
     setContentPane(desktopPane);
+
+
+    MasterRectangleGameField mas = new MasterRectangleGameField(9, 9, GAME_LEVEL.EASY, new Random());
+    RectangleSapperModel model = new RectangleSapperModel(
+              mas,
+              new PlayerRectangleGameField(9, 9)
+    );
+
+    SapperWindows caper = new SapperWindows(new RectangleSapperVisualizer(model));
 
     logWindow = log;
     gameWindow = game;
@@ -78,6 +92,7 @@ public class MainApplicationFrame extends JFrame
         gameLogger.setLocation(10,40);
     }
     gameLogger.localization(localizer);
+
 
     setJMenuBar(generateMenuBar());
     addWindowListener(new WindowAdapter() {

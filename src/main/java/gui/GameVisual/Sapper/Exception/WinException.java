@@ -1,4 +1,4 @@
-package gui.GameVisual.Sapper;
+package gui.GameVisual.Sapper.Exception;
 
 public class WinException extends Exception{
 }

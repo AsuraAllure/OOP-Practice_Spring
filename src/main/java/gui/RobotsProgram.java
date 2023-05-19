@@ -1,6 +1,6 @@
 package gui;
 
-import gui.InternalWindows.CaperWindows;
+import gui.InternalWindows.SapperWindows;
 import gui.InternalWindows.GameLogger;
 import gui.InternalWindows.GameWindow;
 import gui.InternalWindows.LogWindow;
@@ -29,7 +29,7 @@ public class RobotsProgram
               new LogWindow(Logger.getDefaultLogSource(), "logFrame"),
               new GameWindow(),
               new GameLogger(new LogWindowSource(100), true),
-              new CaperWindows()
+              new SapperWindows()
       );
       frame.pack();
       frame.setVisible(true);

@@ -42,6 +42,7 @@ public class RectangleSapperModel implements SapperModel{
             default -> gameTable.set(i, j, masterField.get(i, j));
         }
 
+
         if (gameTable.checkWin(masterField.getCountBomb()))
             throw new WinException();
 
@@ -49,6 +50,8 @@ public class RectangleSapperModel implements SapperModel{
         return gameTable.getField();
     }
 
+    private void pass(){
+    }
     private void endGame(int i, int j) throws LooseException{
         gameTable.set(i, j, Cell.BOMB);
         throw new LooseException();

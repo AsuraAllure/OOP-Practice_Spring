@@ -36,10 +36,13 @@ import log.Logger;
 
 public class MainApplicationFrame extends JFrame
 {
+
+  private  SapperWindows sapperWindows;
   private final LogWindow logWindow;
   private final GameWindow gameWindow;
   private final LogWindow gameLogger;
   private final Localizer localizer = new Localizer(UIManager.getDefaults().getDefaultLocale());
+  private JDesktopPane desktopPane;
 
   public MainApplicationFrame(LogWindow log, GameWindow game, GameLogger gameLog) {
     int inset = 50;
@@ -47,7 +50,7 @@ public class MainApplicationFrame extends JFrame
     setBounds(inset, inset,
         screenSize.width  - inset*2,
         screenSize.height - inset*2);
-    JDesktopPane desktopPane = new JDesktopPane();
+    desktopPane = new JDesktopPane();
     setContentPane(desktopPane);
 
 
@@ -58,13 +61,15 @@ public class MainApplicationFrame extends JFrame
     );
 
     SapperWindows caper = new SapperWindows(new RectangleSapperVisualizer(model));
+    desktopPane.add(caper);
+    caper.setVisible(true);
 
+    sapperWindows = caper;
     logWindow = log;
     gameWindow = game;
     gameLogger = gameLog;
 
-    desktopPane.add(caper);
-    caper.setVisible(true);
+
 
     game.getModel().addObserver(gameLog);
     localizer.localize();
@@ -114,6 +119,25 @@ public class MainApplicationFrame extends JFrame
     menuBar.add(menuBuilder.createTestMenu());
     menuBar.add(menuBuilder.createExitMenu());
     menuBar.add(menuBuilder.createChangeLanguageMenu());
+
+    JMenu sapperM = new JMenu("Сапер");
+    JMenuItem s = new JMenuItem("Легкая сложность");
+    s.addActionListener((actionEvent -> {
+        sapperWindows.dispose();
+        MasterRectangleGameField mas = new MasterToricRectangleGameField(new RectangleGameField(9, 9), GAME_LEVEL.EASY, new Random());
+        RectangleSapperModel model = new RectangleSapperModel(
+                mas,
+                new PlayerRectangleGameField(new RectangleGameField(9, 9))
+        );
+
+        SapperWindows caper = new SapperWindows(new RectangleSapperVisualizer(model));
+        desktopPane.add(caper);
+        caper.setVisible(true);
+
+        sapperWindows = caper;
+    }));
+    sapperM.add(s);
+    menuBar.add(sapperM);
     return menuBar;
   }
 

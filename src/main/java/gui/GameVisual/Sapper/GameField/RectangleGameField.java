@@ -26,11 +26,11 @@ public class RectangleGameField implements GameField{
     public int getCountCell(){
         return firstDimension * secondDimension;
     }
-    protected boolean checkBorder(int x, int y){
+    public boolean checkBorder(int x, int y){
         return !(x >= firstDimension || x < 0  || y >= secondDimension || y < 0);
     }
 
-    protected void upgrade(int x, int y){
+    public void upgrade(int x, int y){
         switch (matrix[x][y]) {
             case FIELD, CLEAR -> matrix[x][y] = Cell.ONE;
             case ONE -> matrix[x][y] = Cell.TWO;

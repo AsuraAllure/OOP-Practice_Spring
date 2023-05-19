@@ -2,8 +2,9 @@ package gui.GameVisual.Sapper.Models;
 
 import gui.GameVisual.Sapper.Enums.Cell;
 import gui.GameVisual.Sapper.Enums.GAME_LEVEL;
-import gui.GameVisual.Sapper.GameField.MasterRectangleGameField;
-import gui.GameVisual.Sapper.GameField.PlayerRectangleGameField;
+import gui.GameVisual.Sapper.LogicalField.MasterRectangleGameField;
+import gui.GameVisual.Sapper.LogicalField.MasterToricRectangleGameField;
+import gui.GameVisual.Sapper.LogicalField.PlayerRectangleGameField;
 import gui.GameVisual.Sapper.GameField.RectangleGameField;
 import gui.GameVisual.Sapper.Exception.LooseException;
 import gui.GameVisual.Sapper.Exception.WinException;
@@ -20,15 +21,19 @@ public class RectangleSapperModel implements SapperModel{
         masterField = mas;
     }
     public RectangleGameField getGameTable(){
-        return gameTable;
+        return gameTable.getField();
     }
 
-    public RectangleGameField mark(int i, int j){
+    public RectangleGameField mark(int i, int j) throws WinException{
         switch (gameTable.get(i, j)) {
             case FIELD -> gameTable.set(i, j, Cell.MARK);
             case MARK -> gameTable.set(i, j, Cell.FIELD);
         }
-        return gameTable;
+
+        if (gameTable.checkWin(masterField.getCountBomb()))
+            throw new WinException();
+
+        return gameTable.getField();
     }
     public RectangleGameField touch(int i, int j) throws LooseException, WinException {
         switch (masterField.get(i, j)){
@@ -37,10 +42,11 @@ public class RectangleSapperModel implements SapperModel{
             default -> gameTable.set(i, j, masterField.get(i, j));
         }
 
-        if (gameTable.getCountCell() - gameTable.getCountOpened() == masterField.getCountBomb())
+        if (gameTable.checkWin(masterField.getCountBomb()))
             throw new WinException();
 
-        return gameTable;
+
+        return gameTable.getField();
     }
 
     private void endGame(int i, int j) throws LooseException{
@@ -54,8 +60,8 @@ public class RectangleSapperModel implements SapperModel{
     }
 
     public static void main(String[] args) {
-        MasterRectangleGameField  m = new MasterRectangleGameField(4, 4, GAME_LEVEL.EASY, new Random());
-        PlayerRectangleGameField p = new PlayerRectangleGameField(4, 4);
+        MasterRectangleGameField  m = new MasterToricRectangleGameField(new RectangleGameField(4, 4), GAME_LEVEL.EASY, new Random());
+        PlayerRectangleGameField p = new PlayerRectangleGameField(new RectangleGameField(4, 4));
 
         RectangleSapperModel cp = new RectangleSapperModel(m, p);
 

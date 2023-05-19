@@ -1,11 +1,5 @@
 package gui;
 
-import gui.GameVisual.Sapper.Enums.GAME_LEVEL;
-import gui.GameVisual.Sapper.GameField.MasterRectangleGameField;
-import gui.GameVisual.Sapper.GameField.PlayerRectangleGameField;
-import gui.GameVisual.Sapper.Models.RectangleSapperModel;
-import gui.GameVisual.Sapper.Visualizers.RectangleSapperVisualizer;
-import gui.InternalWindows.SapperWindows;
 import gui.InternalWindows.GameLogger;
 import gui.InternalWindows.GameWindow;
 import gui.InternalWindows.LogWindow;
@@ -13,7 +7,6 @@ import log.LogWindowSource;
 import log.Logger;
 
 import java.awt.Frame;
-import java.util.Random;
 
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;

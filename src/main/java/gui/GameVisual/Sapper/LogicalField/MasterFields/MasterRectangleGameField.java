@@ -2,6 +2,7 @@ package gui.GameVisual.Sapper.LogicalField.MasterFields;
 
 import gui.GameVisual.Sapper.Enums.Cell;
 import gui.GameVisual.Sapper.Enums.GAME_LEVEL;
+import gui.GameVisual.Sapper.Exception.NO_DEFINED_GAME_LEVEL_COUNT;
 import gui.GameVisual.Sapper.GameField.RectangleGameField;
 
 import java.util.Random;
@@ -22,6 +23,7 @@ public class MasterRectangleGameField  {
             case EASY -> (int)Math.round(firstDimension * secondDimension * 0.15);
             case MEDIUM ->(int)Math.round(firstDimension * secondDimension * 0.25);
             case HARD -> (int)Math.round(firstDimension * secondDimension * 0.35);
+            default -> throw new NO_DEFINED_GAME_LEVEL_COUNT();
         };
     }
     protected void fillBomb(Random rand, GAME_LEVEL level){

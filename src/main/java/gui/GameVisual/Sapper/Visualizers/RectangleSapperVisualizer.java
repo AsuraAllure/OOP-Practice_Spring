@@ -69,9 +69,6 @@ public class RectangleSapperVisualizer extends AbstractSapperVisualizer {
                 repaint();
             }
         });
-
-
-
         curTable = model.getGameTable();
         setDoubleBuffered(true);
     }

@@ -12,14 +12,16 @@ public class RectangleToricGameField extends RectangleGameField {
         if (!(x >= firstDimension || x < 0  || y >= secondDimension || y < 0))
             return matrix[x][y];
         if (x >= firstDimension)
-            x = x - firstDimension;
-        if (x < 0)
-            x = firstDimension + x;
+            x = x % firstDimension;
+
+        while (x < 0)
+            x += firstDimension;
 
         if (y >= secondDimension)
             y = y - secondDimension;
-        if (y < 0)
-            y = secondDimension + y;
+
+        while (y < 0)
+            y += secondDimension;
 
         return matrix[x][y];
     }

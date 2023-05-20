@@ -2,8 +2,8 @@ package gui.GameVisual.Sapper.Models;
 
 import gui.GameVisual.Sapper.Enums.Cell;
 import gui.GameVisual.Sapper.Enums.GAME_LEVEL;
-import gui.GameVisual.Sapper.LogicalField.MasterRectangleGameField;
-import gui.GameVisual.Sapper.LogicalField.MasterToricRectangleGameField;
+import gui.GameVisual.Sapper.LogicalField.MasterFields.MasterRectangleGameField;
+import gui.GameVisual.Sapper.LogicalField.MasterFields.MasterToricRectangleGameField;
 import gui.GameVisual.Sapper.LogicalField.PlayerRectangleGameField;
 import gui.GameVisual.Sapper.GameField.RectangleGameField;
 import gui.GameVisual.Sapper.Exception.LooseException;
@@ -12,7 +12,7 @@ import gui.GameVisual.Sapper.Exception.WinException;
 import java.util.Random;
 import java.util.Scanner;
 
-public class RectangleSapperModel implements SapperModel{
+public class RectangleSapperModel {
     public MasterRectangleGameField masterField;
     public PlayerRectangleGameField  gameTable;
 
@@ -50,8 +50,6 @@ public class RectangleSapperModel implements SapperModel{
         return gameTable.getField();
     }
 
-    private void pass(){
-    }
     private void endGame(int i, int j) throws LooseException{
         gameTable.set(i, j, Cell.BOMB);
         throw new LooseException();

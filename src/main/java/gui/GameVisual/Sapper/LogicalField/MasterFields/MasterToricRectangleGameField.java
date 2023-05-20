@@ -1,17 +1,17 @@
-package gui.GameVisual.Sapper.LogicalField;
+package gui.GameVisual.Sapper.LogicalField.MasterFields;
 
 import gui.GameVisual.Sapper.Enums.Cell;
 import gui.GameVisual.Sapper.Enums.GAME_LEVEL;
 import gui.GameVisual.Sapper.GameField.RectangleGameField;
+import gui.GameVisual.Sapper.LogicalField.MasterFields.MasterRectangleGameField;
 
 import java.util.Random;
 
-public class MasterToricRectangleGameField extends MasterRectangleGameField{
+public class MasterToricRectangleGameField extends MasterRectangleGameField {
 
     public MasterToricRectangleGameField(RectangleGameField field, GAME_LEVEL level, Random r) {
         super(field, level, r);
     }
-
     @Override
     protected void fillNumbersAndClears(){
         int firstDimension = field.getFirstDimension();

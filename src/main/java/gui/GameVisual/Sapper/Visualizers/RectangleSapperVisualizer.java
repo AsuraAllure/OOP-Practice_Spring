@@ -5,7 +5,6 @@ import gui.GameVisual.Sapper.Exception.LooseException;
 import gui.GameVisual.Sapper.Exception.WinException;
 import gui.GameVisual.Sapper.GameField.RectangleGameField;
 import gui.GameVisual.Sapper.Models.RectangleSapperModel;
-import gui.GameVisual.Sapper.Models.SapperModel;
 import log.Logger;
 
 import java.awt.Color;
@@ -130,8 +129,4 @@ public class RectangleSapperVisualizer extends AbstractSapperVisualizer {
         g2d.drawString(value, x- cellWidth/8 , y+cellHeight/8);
     }
 
-    @Override
-    public void updateModel(SapperModel m) {
-        this.model = (RectangleSapperModel) m;
-    }
 }

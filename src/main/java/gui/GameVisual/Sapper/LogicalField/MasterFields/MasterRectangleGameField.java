@@ -1,4 +1,4 @@
-package gui.GameVisual.Sapper.LogicalField;
+package gui.GameVisual.Sapper.LogicalField.MasterFields;
 
 import gui.GameVisual.Sapper.Enums.Cell;
 import gui.GameVisual.Sapper.Enums.GAME_LEVEL;
@@ -6,7 +6,7 @@ import gui.GameVisual.Sapper.GameField.RectangleGameField;
 
 import java.util.Random;
 
-public class MasterRectangleGameField implements MasterGameField {
+public class MasterRectangleGameField  {
     protected int countBomb;
     protected RectangleGameField field;
 
@@ -69,13 +69,10 @@ public class MasterRectangleGameField implements MasterGameField {
         System.out.println();
     }
 
-
-    @Override
     public Cell get(int i, int j) {
         return field.get(i, j);
     }
 
-    @Override
     public void set(int i, int j, Cell c) {
         field.set(i, j, c);
     }

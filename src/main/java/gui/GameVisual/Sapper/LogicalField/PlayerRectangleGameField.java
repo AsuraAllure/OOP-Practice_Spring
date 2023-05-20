@@ -2,11 +2,12 @@ package gui.GameVisual.Sapper.LogicalField;
 
 import gui.GameVisual.Sapper.Enums.Cell;
 import gui.GameVisual.Sapper.GameField.RectangleGameField;
+import gui.GameVisual.Sapper.LogicalField.MasterFields.MasterRectangleGameField;
 
 import java.util.LinkedList;
 import java.util.Queue;
 
-public class PlayerRectangleGameField implements PlayerGameField {
+public class PlayerRectangleGameField {
     private RectangleGameField field;
     public PlayerRectangleGameField(RectangleGameField rec){
         field = rec;
@@ -16,12 +17,10 @@ public class PlayerRectangleGameField implements PlayerGameField {
         return field;
     }
 
-    @Override
     public Cell get(int i, int j) {
         return field.get(i, j);
     }
 
-    @Override
     public void set(int i, int j, Cell c){
         field.set(i, j, c);
     }
@@ -36,7 +35,7 @@ public class PlayerRectangleGameField implements PlayerGameField {
             cur_i = fIndex.element();
             cur_j = sIndex.element();
 
-            set(cur_i, cur_j, Cell.CLEAR);
+            field.set(cur_i, cur_j, Cell.CLEAR);
 
             fIndex.remove();
             sIndex.remove();
@@ -48,13 +47,11 @@ public class PlayerRectangleGameField implements PlayerGameField {
                             fIndex.add(x);
                             sIndex.add(y);
                         }else
-                            set(x, y, pattern.get(x, y));
-
+                            field.set(x, y, pattern.get(x, y));
         }
     }
 
     public boolean checkWin(int countBomb){
-        boolean f = false;
         int countUnseen = 0;
 
         for (int x =0 ; x < field.getFirstDimension(); x++)
@@ -67,7 +64,7 @@ public class PlayerRectangleGameField implements PlayerGameField {
     public void print(){
         field.print();
     }
-    @Override
+
     public int getCountCell() {
         return field.getFirstDimension()* field.getSecondDimension();
     }

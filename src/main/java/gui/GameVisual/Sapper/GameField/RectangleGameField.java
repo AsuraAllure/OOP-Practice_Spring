@@ -2,7 +2,7 @@ package gui.GameVisual.Sapper.GameField;
 
 import gui.GameVisual.Sapper.Enums.Cell;
 
-public class RectangleGameField implements GameField{
+public class RectangleGameField {
     protected final int firstDimension;
     protected final int secondDimension;
     protected final Cell[][] matrix;
@@ -23,13 +23,9 @@ public class RectangleGameField implements GameField{
     public int getSecondDimension(){
         return secondDimension;
     }
-    public int getCountCell(){
-        return firstDimension * secondDimension;
-    }
     public boolean checkBorder(int x, int y){
         return !(x >= firstDimension || x < 0  || y >= secondDimension || y < 0);
     }
-
     public void upgrade(int x, int y){
         switch (matrix[x][y]) {
             case FIELD, CLEAR -> matrix[x][y] = Cell.ONE;
@@ -42,7 +38,6 @@ public class RectangleGameField implements GameField{
             case SEVEN -> matrix[x][y] = Cell.EIGTH;
         }
     }
-
     public Cell get(int i, int j){
         return matrix[i][j];
     }

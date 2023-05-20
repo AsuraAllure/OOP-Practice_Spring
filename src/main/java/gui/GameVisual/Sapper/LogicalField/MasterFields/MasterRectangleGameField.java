@@ -49,8 +49,7 @@ public class MasterRectangleGameField  {
                 if (field.get(i, j) ==  Cell.BOMB) {
                     for (int x = i - 1; x <= i + 1; x++)
                         for (int y = j - 1; y <= j + 1; y++)
-                            if (field.checkBorder(x, y))
-                                field.upgrade(x, y);
+                            field.upgrade(x, y);
                 }
 
                 if (field.get(i, j) == Cell.FIELD)

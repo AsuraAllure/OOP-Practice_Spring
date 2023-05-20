@@ -1,3 +1,3 @@
 package gui.GameVisual.Sapper.Enums;
 
-public enum Cell {BOMB, MARK, FIELD ,CLEAR, ONE, TWO, THREE, FOUR,FIVE, SIX, SEVEN, EIGTH}
+public enum Cell {BOMB,  ONE, TWO, THREE, FOUR,FIVE, SIX, SEVEN, EIGHT, MARK, FIELD ,CLEAR,NULL}

@@ -47,14 +47,18 @@ public class RectangleSapperVisualizer extends AbstractSapperVisualizer {
                 int x  = e.getX() / cellWidth;
                 int y = e.getY() / cellHeight;
 
-                if (state != GameState.PLAY)
+                if (state != GameState.PLAY) {
+                    repaint();
                     return;
+                }
 
                 try {
+
                     if (SwingUtilities.isLeftMouseButton(e))
                         curTable = model.touch(x, y);
                     else
                         curTable = model.mark(x, y);
+
                 }catch (WinException winException){
                     state = GameState.WIN;
                     Logger.debug("Вы выйграли");
@@ -93,7 +97,7 @@ public class RectangleSapperVisualizer extends AbstractSapperVisualizer {
                     case FIVE -> drawNum(g2d, posX, posY, "5");
                     case SIX -> drawNum(g2d, posX, posY, "6");
                     case SEVEN -> drawNum(g2d, posX, posY, "7");
-                    case EIGTH -> drawNum(g2d, posX, posY, "8");
+                    case EIGHT -> drawNum(g2d, posX, posY, "8");
                     case MARK -> drawMark(g2d, posX, posY);
                     }
                 }

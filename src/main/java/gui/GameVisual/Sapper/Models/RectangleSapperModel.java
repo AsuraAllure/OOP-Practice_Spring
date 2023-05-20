@@ -2,19 +2,21 @@ package gui.GameVisual.Sapper.Models;
 
 import gui.GameVisual.Sapper.Enums.Cell;
 import gui.GameVisual.Sapper.Enums.GAME_LEVEL;
+import gui.GameVisual.Sapper.GameField.RectangleToricGameField;
 import gui.GameVisual.Sapper.LogicalField.MasterFields.MasterRectangleGameField;
-import gui.GameVisual.Sapper.LogicalField.MasterFields.MasterToricRectangleGameField;
-import gui.GameVisual.Sapper.LogicalField.PlayerRectangleGameField;
+
 import gui.GameVisual.Sapper.GameField.RectangleGameField;
 import gui.GameVisual.Sapper.Exception.LooseException;
 import gui.GameVisual.Sapper.Exception.WinException;
+import gui.GameVisual.Sapper.LogicalField.PlayersFields.PlayerRectangleGameField;
+
 
 import java.util.Random;
 import java.util.Scanner;
 
 public class RectangleSapperModel {
     public MasterRectangleGameField masterField;
-    public PlayerRectangleGameField  gameTable;
+    public PlayerRectangleGameField gameTable;
 
     public RectangleSapperModel(MasterRectangleGameField mas, PlayerRectangleGameField pl){
         gameTable = pl;
@@ -24,10 +26,12 @@ public class RectangleSapperModel {
         return gameTable.getField();
     }
 
-    public RectangleGameField mark(int i, int j) throws WinException{
+    public RectangleGameField mark(int i, int j) throws WinException, LooseException {
         switch (gameTable.get(i, j)) {
             case FIELD -> gameTable.set(i, j, Cell.MARK);
             case MARK -> gameTable.set(i, j, Cell.FIELD);
+            case CLEAR -> pass();
+            default -> gameTable.openObviousCell(i, j, masterField);
         }
 
         if (gameTable.checkWin(masterField.getCountBomb()))
@@ -35,6 +39,8 @@ public class RectangleSapperModel {
 
         return gameTable.getField();
     }
+
+    private void pass(){}
     public RectangleGameField touch(int i, int j) throws LooseException, WinException {
         switch (masterField.get(i, j)){
             case BOMB -> endGame(i, j);
@@ -45,7 +51,6 @@ public class RectangleSapperModel {
 
         if (gameTable.checkWin(masterField.getCountBomb()))
             throw new WinException();
-
 
         return gameTable.getField();
     }
@@ -61,8 +66,8 @@ public class RectangleSapperModel {
     }
 
     public static void main(String[] args) {
-        MasterRectangleGameField  m = new MasterToricRectangleGameField(new RectangleGameField(4, 4), GAME_LEVEL.EASY, new Random());
-        PlayerRectangleGameField p = new PlayerRectangleGameField(new RectangleGameField(4, 4));
+        MasterRectangleGameField  m = new MasterRectangleGameField(new RectangleToricGameField(9, 9), GAME_LEVEL.EASY, new Random());
+        PlayerRectangleGameField p = new PlayerRectangleGameField(new RectangleToricGameField(9, 9));
 
         RectangleSapperModel cp = new RectangleSapperModel(m, p);
 

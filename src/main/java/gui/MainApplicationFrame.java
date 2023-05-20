@@ -22,10 +22,10 @@ import javax.swing.KeyStroke;
 import gui.Extends.Configurators.Exceptions.InternalFrameLoadException;
 import gui.Extends.Localizer.Localizer;
 import gui.GameVisual.Sapper.Enums.GAME_LEVEL;
+import gui.GameVisual.Sapper.GameField.RectangleToricGameField;
 import gui.GameVisual.Sapper.LogicalField.MasterFields.MasterRectangleGameField;
-import gui.GameVisual.Sapper.LogicalField.MasterFields.MasterToricRectangleGameField;
-import gui.GameVisual.Sapper.LogicalField.PlayerRectangleGameField;
 import gui.GameVisual.Sapper.GameField.RectangleGameField;
+import gui.GameVisual.Sapper.LogicalField.PlayersFields.PlayerRectangleGameField;
 import gui.GameVisual.Sapper.Models.RectangleSapperModel;
 import gui.GameVisual.Sapper.Visualizers.RectangleSapperVisualizer;
 import gui.InternalWindows.SapperWindows;
@@ -54,10 +54,10 @@ public class MainApplicationFrame extends JFrame
     setContentPane(desktopPane);
 
 
-    MasterRectangleGameField mas = new MasterToricRectangleGameField(new RectangleGameField(9, 9), GAME_LEVEL.EASY, new Random());
+    MasterRectangleGameField mas = new MasterRectangleGameField(new RectangleToricGameField(9, 9), GAME_LEVEL.EASY, new Random());
     RectangleSapperModel model = new RectangleSapperModel(
               mas,
-              new PlayerRectangleGameField(new RectangleGameField(9, 9))
+              new PlayerRectangleGameField(new RectangleToricGameField(9, 9))
     );
 
     SapperWindows caper = new SapperWindows(new RectangleSapperVisualizer(model));
@@ -122,12 +122,15 @@ public class MainApplicationFrame extends JFrame
 
     JMenu sapperM = new JMenu("Сапер");
     JMenuItem s = new JMenuItem("Легкая сложность");
+
+
+    s.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C, ActionEvent.SHIFT_MASK));
     s.addActionListener((actionEvent -> {
         sapperWindows.dispose();
-        MasterRectangleGameField mas = new MasterToricRectangleGameField(new RectangleGameField(9, 9), GAME_LEVEL.EASY, new Random());
+        MasterRectangleGameField mas = new MasterRectangleGameField(new RectangleToricGameField(9, 9), GAME_LEVEL.EASY, new Random());
         RectangleSapperModel model = new RectangleSapperModel(
                 mas,
-                new PlayerRectangleGameField(new RectangleGameField(9, 9))
+                new PlayerRectangleGameField(new RectangleToricGameField(9, 9))
         );
 
         SapperWindows caper = new SapperWindows(new RectangleSapperVisualizer(model));

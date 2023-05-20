@@ -23,33 +23,33 @@ public class RectangleGameField {
     public int getSecondDimension(){
         return secondDimension;
     }
-    public boolean checkBorder(int x, int y){
-        return !(x >= firstDimension || x < 0  || y >= secondDimension || y < 0);
-    }
     public void upgrade(int x, int y){
-        switch (matrix[x][y]) {
-            case FIELD, CLEAR -> matrix[x][y] = Cell.ONE;
-            case ONE -> matrix[x][y] = Cell.TWO;
-            case TWO -> matrix[x][y] = Cell.THREE;
-            case THREE -> matrix[x][y] = Cell.FOUR;
-            case FOUR -> matrix[x][y] = Cell.FIVE;
-            case FIVE -> matrix[x][y] = Cell.SIX;
-            case SIX -> matrix[x][y] = Cell.SEVEN;
-            case SEVEN -> matrix[x][y] = Cell.EIGTH;
+        switch (get(x, y)) {
+            case FIELD, CLEAR -> set(x, y, Cell.ONE);
+            case ONE -> set(x, y, Cell.TWO);
+            case TWO -> set(x, y, Cell.THREE);
+            case THREE -> set(x, y, Cell.FOUR);
+            case FOUR -> set(x, y, Cell.FIVE);
+            case FIVE -> set(x, y, Cell.SIX);
+            case SIX -> set(x, y, Cell.SEVEN);
+            case SEVEN -> set(x, y, Cell.EIGHT);
         }
     }
-    public Cell get(int i, int j){
-        return matrix[i][j];
+    public Cell get(int x, int y){
+        if (!(x >= firstDimension || x < 0  || y >= secondDimension || y < 0))
+            return matrix[x][y];
+        return Cell.NULL;
     }
 
-    public void set(int i, int j, Cell c){
-        matrix[i][j] = c;
+    public void set(int x, int y, Cell c){
+        if (!(x >= firstDimension || x < 0  || y >= secondDimension || y < 0))
+            matrix[x][y] = c;
     }
 
     public void print(){
         for(int i = 0; i < firstDimension; i++){
             for(int j = 0; j < secondDimension; j++) {
-                System.out.print(matrix[i][j]);
+                System.out.print(get(i, j));
                 System.out.print("  ");
             }
             System.out.println("");}

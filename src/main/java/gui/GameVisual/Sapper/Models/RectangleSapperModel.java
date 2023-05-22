@@ -45,6 +45,7 @@ public class RectangleSapperModel {
         switch (masterField.get(i, j)){
             case BOMB -> endGame(i, j);
             case CLEAR -> gameTable.chainReactions(i,j, masterField);
+            case MARK -> pass();
             default -> gameTable.set(i, j, masterField.get(i, j));
         }
 

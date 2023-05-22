@@ -16,7 +16,7 @@ public class LogWindow extends FileConfigurator implements LogChangeListener
 
   public LogWindow(LogWindowSource logSource, String filename){
 
-    super(filename, "Протокол работы", true, true, true, true);
+    super(filename, "Протокол работы", true, false, true, true);
     m_logSource = logSource;
     m_logSource.registerListener(this);
     m_logContent = new TextArea("");

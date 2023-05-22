@@ -8,6 +8,10 @@ public class RectangleToricGameField extends RectangleGameField {
     }
 
     @Override
+    public RectangleGameField copy(){
+        return new RectangleToricGameField(firstDimension, secondDimension);
+    }
+    @Override
     public Cell get(int x, int y){
         if (!(x >= firstDimension || x < 0  || y >= secondDimension || y < 0))
             return matrix[x][y];

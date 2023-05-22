@@ -55,9 +55,9 @@ public class RectangleSapperVisualizer extends AbstractSapperVisualizer {
                 try {
 
                     if (SwingUtilities.isLeftMouseButton(e))
-                        curTable = model.touch(x, y);
+                        curTable = RectangleSapperVisualizer.this.model.touch(x, y);
                     else
-                        curTable = model.mark(x, y);
+                        curTable = RectangleSapperVisualizer.this.model.mark(x, y);
 
                 }catch (WinException winException){
                     state = GameState.WIN;
@@ -73,6 +73,13 @@ public class RectangleSapperVisualizer extends AbstractSapperVisualizer {
         setDoubleBuffered(true);
     }
 
+    @Override
+    public void resetModel(RectangleSapperModel m){
+        this.model = m;
+        this.state = GameState.PLAY;
+        this.curTable = this.model.getGameTable();
+        repaint();
+    }
 
     @Override
     public void paint(Graphics g)

@@ -1,38 +1,26 @@
 package gui;
 
-import gui.GameVisual.Sapper.GameField.RectangleGameField;
-import java.awt.Dimension;
-import java.awt.Toolkit;
-import java.awt.event.KeyEvent;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import java.awt.event.ActionEvent;
-import java.util.*;
-
-import javax.swing.JDesktopPane;
-import javax.swing.JFrame;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
-import javax.swing.SwingUtilities;
-import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
-import javax.swing.JOptionPane;
-import javax.swing.KeyStroke;
-
 import gui.Extends.Configurators.Exceptions.InternalFrameLoadException;
 import gui.Extends.Localizer.Localizer;
 import gui.GameVisual.Sapper.Enums.GAME_LEVEL;
+import gui.GameVisual.Sapper.GameField.RectangleGameField;
 import gui.GameVisual.Sapper.GameField.RectangleToricGameField;
-import gui.GameVisual.Sapper.LogicalField.MasterFields.MasterRectangleGameField;
-import gui.GameVisual.Sapper.LogicalField.PlayersFields.PlayerRectangleGameField;
-import gui.GameVisual.Sapper.Models.RectangleSapperModel;
+import gui.GameVisual.Sapper.Factories.RectangleModelFactory;
 import gui.GameVisual.Sapper.Visualizers.RectangleSapperVisualizer;
-import gui.InternalWindows.SapperWindows;
 import gui.InternalWindows.GameLogger;
 import gui.InternalWindows.GameWindow;
 import gui.InternalWindows.LogWindow;
+import gui.InternalWindows.SapperWindows;
 import log.Logger;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.util.Locale;
+import java.util.Random;
 
 public class MainApplicationFrame extends JFrame {
 
@@ -40,12 +28,8 @@ public class MainApplicationFrame extends JFrame {
   private final GameWindow gameWindow;
   private final LogWindow gameLogger;
   private final Localizer localizer = new Localizer(UIManager.getDefaults().getDefaultLocale());
-  public GAME_LEVEL level = GAME_LEVEL.EASY;
-  public boolean toricField = true;
-  private MasterRectangleGameField mas;
-  private RectangleSapperModel model;
-  private SapperWindows sapperWindows;
-  private JDesktopPane desktopPane;
+  private final SapperWindows sapperWindows;
+  private final JDesktopPane desktopPane;
 
 
   public MainApplicationFrame(LogWindow log, GameWindow game, GameLogger gameLog) {
@@ -57,17 +41,20 @@ public class MainApplicationFrame extends JFrame {
     desktopPane = new JDesktopPane();
     setContentPane(desktopPane);
 
-    mas = new MasterRectangleGameField(new RectangleGameField(9, 9), level, new Random());
-    model = new RectangleSapperModel(
-        mas,
-        new PlayerRectangleGameField(new RectangleGameField(9, 9))
+
+    sapperWindows = new SapperWindows(
+            new RectangleSapperVisualizer(
+                    RectangleModelFactory.createModel(
+                            new RectangleGameField(9, 9),
+                            GAME_LEVEL.EASY,
+                            new Random())
+            )
     );
+    sapperWindows.setField(new RectangleGameField(9, 9));
+    sapperWindows.setLevel(GAME_LEVEL.EASY);
+    desktopPane.add(sapperWindows);
+    sapperWindows.setVisible(true);
 
-    SapperWindows caper = new SapperWindows(new RectangleSapperVisualizer(model));
-    desktopPane.add(caper);
-    caper.setVisible(true);
-
-    sapperWindows = caper;
     logWindow = log;
     gameWindow = game;
     gameLogger = gameLog;
@@ -111,28 +98,6 @@ public class MainApplicationFrame extends JFrame {
 
     setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
   }
-
-  public void setLevel(String str) {
-    level = GAME_LEVEL.valueOf(str);
-  }
-
-  private void setField(boolean toric) {
-    if (toric) {
-      mas = new MasterRectangleGameField(new RectangleToricGameField(9, 9), level, new Random());
-      model = new RectangleSapperModel(
-          mas,
-          new PlayerRectangleGameField(new RectangleToricGameField(9, 9))
-      );
-    } else {
-      mas = new MasterRectangleGameField(new RectangleGameField(9, 9), level, new Random());
-      model = new RectangleSapperModel(
-          mas,
-          new PlayerRectangleGameField(new RectangleGameField(9, 9))
-      );
-    }
-
-  }
-
 
   private JMenuBar generateMenuBar() {
     JMenuBar menuBar = new JMenuBar();
@@ -278,26 +243,29 @@ public class MainApplicationFrame extends JFrame {
       JMenuItem toric = new JMenuItem("Торическое поле");
       JMenuItem normal = new JMenuItem("Нормальное поле");
 
+
       toric.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_T, ActionEvent.SHIFT_MASK));
       toric.addActionListener((actionEvent -> {
-        sapperWindows.dispose();
-        setField(true);
-        SapperWindows caper = new SapperWindows(new RectangleSapperVisualizer(model));
-        desktopPane.add(caper);
-        caper.setVisible(true);
-        sapperWindows = caper;
-        toricField = true;
+        sapperWindows.resetModel(
+                RectangleModelFactory.createModel(
+                        new RectangleToricGameField(9, 9),
+                        sapperWindows.getLevel(),
+                        new Random()
+                )
+        );
+        sapperWindows.setField(new RectangleToricGameField(9, 9));
       }));
 
       normal.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, ActionEvent.SHIFT_MASK));
       normal.addActionListener((actionEvent -> {
-        sapperWindows.dispose();
-        setField(toricField);
-        SapperWindows caper = new SapperWindows(new RectangleSapperVisualizer(model));
-        desktopPane.add(caper);
-        caper.setVisible(true);
-        sapperWindows = caper;
-        toricField = false;
+        sapperWindows.resetModel(
+                RectangleModelFactory.createModel(
+                        new RectangleGameField(9, 9),
+                        sapperWindows.getLevel(),
+                        new Random()
+                )
+        );
+        sapperWindows.setField(new RectangleGameField(9, 9));
       }));
 
       sapperF.add(toric);
@@ -314,37 +282,37 @@ public class MainApplicationFrame extends JFrame {
 
       easy.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_E, ActionEvent.SHIFT_MASK));
       easy.addActionListener((actionEvent -> {
-        sapperWindows.dispose();
-        setLevel("EASY");
-        setField(toricField);
-        SapperWindows caper = new SapperWindows(new RectangleSapperVisualizer(model));
-        desktopPane.add(caper);
-        caper.setVisible(true);
-
-        sapperWindows = caper;
-
+        sapperWindows.resetModel(
+                RectangleModelFactory.createModel(
+                        sapperWindows.getField(),
+                        GAME_LEVEL.EASY,
+                        new Random()
+                )
+        );
+        sapperWindows.setLevel(GAME_LEVEL.EASY);
       }));
+
       medium.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_M, ActionEvent.SHIFT_MASK));
       medium.addActionListener((actionEvent -> {
-        sapperWindows.dispose();
-        setLevel("MEDIUM");
-        setField(toricField);
-        SapperWindows caper = new SapperWindows(new RectangleSapperVisualizer(model));
-        desktopPane.add(caper);
-        caper.setVisible(true);
-
-        sapperWindows = caper;
+        sapperWindows.resetModel(
+                RectangleModelFactory.createModel(
+                        sapperWindows.getField(),
+                        GAME_LEVEL.MEDIUM,
+                        new Random()
+                )
+        );
+        sapperWindows.setLevel(GAME_LEVEL.MEDIUM);
       }));
       hard.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_H, ActionEvent.SHIFT_MASK));
       hard.addActionListener((actionEvent -> {
-        sapperWindows.dispose();
-        setLevel("HARD");
-        setField(toricField);
-        SapperWindows caper = new SapperWindows(new RectangleSapperVisualizer(model));
-        desktopPane.add(caper);
-        caper.setVisible(true);
-
-        sapperWindows = caper;
+        sapperWindows.resetModel(
+                RectangleModelFactory.createModel(
+                        sapperWindows.getField(),
+                        GAME_LEVEL.HARD,
+                        new Random()
+                )
+        );
+        sapperWindows.setLevel(GAME_LEVEL.HARD);
       }));
 
       sapperM.add(easy);

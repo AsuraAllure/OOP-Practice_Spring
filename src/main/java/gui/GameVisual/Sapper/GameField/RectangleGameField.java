@@ -17,6 +17,10 @@ public class RectangleGameField {
             }
     }
 
+    public RectangleGameField copy(){
+        return new RectangleGameField(firstDimension, secondDimension);
+    }
+
     public int getFirstDimension(){
         return firstDimension;
     }

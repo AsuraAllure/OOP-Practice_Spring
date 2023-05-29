@@ -16,7 +16,7 @@ public class RectangleToricGameField extends RectangleGameField {
         if (!(x >= firstDimension || x < 0  || y >= secondDimension || y < 0))
             return matrix[x][y];
         while (x >= firstDimension)
-            x = x % firstDimension;
+            x = x - firstDimension;
 
         while (x < 0)
             x += firstDimension;
@@ -33,15 +33,15 @@ public class RectangleToricGameField extends RectangleGameField {
     public void set(int x, int y, Cell c){
         if (!(x >= firstDimension || x < 0  || y >= secondDimension || y < 0))
             matrix[x][y] = c;
-        if (x >= firstDimension)
-            x = x - firstDimension;
-        if (x < 0)
-            x = firstDimension + x;
 
-        if (y >= secondDimension)
+        while (x >= firstDimension)
+            x = x - firstDimension;
+        while (x < 0)
+            x += firstDimension;
+        while (y >= secondDimension)
             y = y - secondDimension;
-        if (y < 0)
-            y = secondDimension + y;
+        while (y < 0)
+            y += secondDimension;
 
         matrix[x][y] = c;
     }

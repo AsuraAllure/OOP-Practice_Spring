@@ -2,6 +2,7 @@ package gui;
 
 import gui.Extends.Configurators.Exceptions.InternalFrameLoadException;
 import gui.Extends.Localizer.Localizer;
+import gui.GameVisual.Sapper.Enums.FieldType;
 import gui.GameVisual.Sapper.Enums.GAME_LEVEL;
 import gui.GameVisual.Sapper.GameField.RectangleGameField;
 import gui.GameVisual.Sapper.GameField.RectangleToricGameField;
@@ -247,12 +248,13 @@ public class MainApplicationFrame extends JFrame {
       toric.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_T, ActionEvent.SHIFT_MASK));
       toric.addActionListener((actionEvent -> {
         sapperWindows.resetModel(
-                RectangleModelFactory.createModel(
+                RectangleModelFactory.createToricModel(
                         new RectangleToricGameField(9, 9),
                         sapperWindows.getLevel(),
                         new Random()
                 )
         );
+        sapperWindows.setFieldType(FieldType.TORIC);
         sapperWindows.setField(new RectangleToricGameField(9, 9));
       }));
 
@@ -265,6 +267,7 @@ public class MainApplicationFrame extends JFrame {
                         new Random()
                 )
         );
+        sapperWindows.setFieldType(FieldType.RECTANGLE);
         sapperWindows.setField(new RectangleGameField(9, 9));
       }));
 
@@ -279,45 +282,98 @@ public class MainApplicationFrame extends JFrame {
       JMenuItem easy = new JMenuItem("Легкая сложность");
       JMenuItem medium = new JMenuItem("Средняя сложность");
       JMenuItem hard = new JMenuItem("Сапер на дежурстве");
+      JMenuItem test = new JMenuItem("Тестировка");
+
+      test.addActionListener((actionEvent -> {
+
+        if (sapperWindows.getType() == FieldType.RECTANGLE)
+          sapperWindows.resetModel(
+                  RectangleModelFactory.createModel(
+                          sapperWindows.getField(),
+                          GAME_LEVEL.TEST,
+                          new Random()
+                  )
+          );
+        else
+          sapperWindows.resetModel(
+                  RectangleModelFactory.createToricModel(
+                          new RectangleToricGameField(9,9),
+                          GAME_LEVEL.TEST,
+                          new Random(2)
+                  )
+          );
+
+        sapperWindows.setLevel(GAME_LEVEL.TEST);
+      }));
+
 
       easy.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_E, ActionEvent.SHIFT_MASK));
       easy.addActionListener((actionEvent -> {
-        sapperWindows.resetModel(
-                RectangleModelFactory.createModel(
-                        sapperWindows.getField(),
-                        GAME_LEVEL.EASY,
-                        new Random()
-                )
-        );
+        if (sapperWindows.getType() == FieldType.RECTANGLE)
+          sapperWindows.resetModel(
+                  RectangleModelFactory.createModel(
+                          sapperWindows.getField(),
+                          GAME_LEVEL.EASY,
+                          new Random()
+                  )
+          );
+        else
+          sapperWindows.resetModel(
+                  RectangleModelFactory.createToricModel(
+                          new RectangleToricGameField(9,9),
+                          GAME_LEVEL.EASY,
+                          new Random()
+                  )
+          );
+
         sapperWindows.setLevel(GAME_LEVEL.EASY);
       }));
 
       medium.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_M, ActionEvent.SHIFT_MASK));
       medium.addActionListener((actionEvent -> {
-        sapperWindows.resetModel(
-                RectangleModelFactory.createModel(
-                        sapperWindows.getField(),
-                        GAME_LEVEL.MEDIUM,
-                        new Random()
-                )
-        );
+        if (sapperWindows.getType() == FieldType.RECTANGLE)
+          sapperWindows.resetModel(
+                  RectangleModelFactory.createModel(
+                          sapperWindows.getField(),
+                          GAME_LEVEL.MEDIUM,
+                          new Random()
+                  )
+          );
+        else
+          sapperWindows.resetModel(
+                  RectangleModelFactory.createToricModel(
+                          new RectangleToricGameField(9,9),
+                          GAME_LEVEL.MEDIUM,
+                          new Random()
+                  )
+          );
         sapperWindows.setLevel(GAME_LEVEL.MEDIUM);
       }));
       hard.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_H, ActionEvent.SHIFT_MASK));
       hard.addActionListener((actionEvent -> {
-        sapperWindows.resetModel(
-                RectangleModelFactory.createModel(
-                        sapperWindows.getField(),
-                        GAME_LEVEL.HARD,
-                        new Random()
-                )
-        );
+        if (sapperWindows.getType() == FieldType.RECTANGLE)
+          sapperWindows.resetModel(
+                  RectangleModelFactory.createModel(
+                          sapperWindows.getField(),
+                          GAME_LEVEL.HARD,
+                          new Random()
+                  )
+          );
+        else
+          sapperWindows.resetModel(
+                  RectangleModelFactory.createToricModel(
+                          new RectangleToricGameField(9,9),
+                          GAME_LEVEL.HARD,
+                          new Random()
+                  )
+          );
         sapperWindows.setLevel(GAME_LEVEL.HARD);
       }));
 
       sapperM.add(easy);
       sapperM.add(medium);
       sapperM.add(hard);
+      sapperM.add(test);
       return sapperM;
     }
   }

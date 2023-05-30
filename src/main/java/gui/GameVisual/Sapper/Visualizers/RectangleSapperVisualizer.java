@@ -151,10 +151,9 @@ public class RectangleSapperVisualizer extends AbstractSapperVisualizer {
                             int x  = pointX / sizeSetting.cellWidth;
                             int y = pointY / sizeSetting.cellHeight;
 
-                            PlayerToricGameField pl = ((PlayerToricGameField) model.getGameTable());
 
-                            pl.pressed(x, y);
-                            pl.swipe(x, y);
+                            model.pressed(x, y);
+                            model.swipe(x, y);
                             repaint();
                         }
                     };
@@ -168,7 +167,7 @@ public class RectangleSapperVisualizer extends AbstractSapperVisualizer {
                         repaint();
                         return;
                     }
-                    ((PlayerToricGameField) model.getGameTable()).release();
+                    model.release();
                     repaint();
                     pressedTask.cancel();
                 }
@@ -182,11 +181,6 @@ public class RectangleSapperVisualizer extends AbstractSapperVisualizer {
                         repaint();
                         return;
                     }
-
-                    int d1 =((PlayerToricGameField) RectangleSapperVisualizer.this.model.getGameTable()).getDifX();
-                    int d2 =((PlayerToricGameField) RectangleSapperVisualizer.this.model.getGameTable()).getDifY();
-
-                    ((MasterToricGameField) RectangleSapperVisualizer.this.model.getMasterTable()).setDif(d1, d2);
 
                     try {
 

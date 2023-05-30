@@ -2,9 +2,10 @@ package gui.InternalWindows;
 
 import gui.Extends.Configurators.ConfiguratorInstance.FileConfigurator;
 import gui.Extends.Localizer.Localizer;
+import gui.GameVisual.Sapper.Enums.FieldType;
 import gui.GameVisual.Sapper.Enums.GAME_LEVEL;
 import gui.GameVisual.Sapper.GameField.RectangleGameField;
-import gui.GameVisual.Sapper.Models.RectangleSapperModel;
+import gui.GameVisual.Sapper.Models.SapperModel;
 import gui.GameVisual.Sapper.Visualizers.AbstractSapperVisualizer;
 
 import java.beans.PropertyVetoException;
@@ -18,12 +19,12 @@ public class SapperWindows extends FileConfigurator
 {
     private GAME_LEVEL level;
     private RectangleGameField field;
+    private FieldType type;
     private AbstractSapperVisualizer visualizer;
     public SapperWindows(AbstractSapperVisualizer m_visualizer)
     {
         super("SapperFrame", "Сапёр", false, false, false, true);
         visualizer = m_visualizer;
-
         setSize(282, 301);
         JPanel panel = new JPanel(new BorderLayout());
         panel.add(visualizer, BorderLayout.CENTER);
@@ -36,13 +37,20 @@ public class SapperWindows extends FileConfigurator
     public GAME_LEVEL getLevel(){
         return level;
     }
+
+    public void setFieldType(FieldType f){
+        type = f;
+    }
+    public FieldType getType(){
+        return type;
+    }
     public void setField(RectangleGameField f){
         this.field = f;
     }
     public RectangleGameField getField(){
         return this.field.copy();
     }
-    public void resetModel(RectangleSapperModel m){
+    public void resetModel(SapperModel m){
         visualizer.resetModel(m);
     }
     public void localization(Localizer localizer){

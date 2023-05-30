@@ -23,6 +23,7 @@ public class MasterRectangleGameField  {
             case EASY -> (int)Math.round(firstDimension * secondDimension * 0.15);
             case MEDIUM ->(int)Math.round(firstDimension * secondDimension * 0.25);
             case HARD -> (int)Math.round(firstDimension * secondDimension * 0.35);
+            case TEST -> (int)Math.round(firstDimension * secondDimension * 0.05);
             default -> throw new NO_DEFINED_GAME_LEVEL_COUNT();
         };
     }

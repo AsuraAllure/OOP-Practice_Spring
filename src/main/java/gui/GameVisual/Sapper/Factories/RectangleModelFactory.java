@@ -11,7 +11,7 @@ import gui.GameVisual.Sapper.Models.SapperModel;
 
 import java.util.Random;
 
-public class RectangleModelFactory {
+public class RectangleModelFactory implements ModelFactory{
 
     public static SapperModel createModel(RectangleGameField field, GAME_LEVEL level, Random r){
         MasterRectangleGameField mas = new MasterRectangleGameField(field.copy(), level, r);
@@ -19,10 +19,5 @@ public class RectangleModelFactory {
         return new SapperModel(mas, pl);
     }
 
-    public static SapperModel createToricModel(RectangleToricGameField field, GAME_LEVEL level, Random r){
-        MasterRectangleGameField mas = new MasterToricGameField(field.copy(), level, r);
-        PlayerRectangleGameField pl = new PlayerToricGameField(field.copy());
-        return new SapperModel(mas, pl);
-    }
 
 }

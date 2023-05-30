@@ -4,6 +4,7 @@ import gui.Extends.Configurators.Exceptions.InternalFrameLoadException;
 import gui.Extends.Localizer.Localizer;
 import gui.GameVisual.Sapper.Enums.FieldType;
 import gui.GameVisual.Sapper.Enums.GAME_LEVEL;
+import gui.GameVisual.Sapper.Factories.RectangleToricalModelFactory;
 import gui.GameVisual.Sapper.GameField.RectangleGameField;
 import gui.GameVisual.Sapper.GameField.RectangleToricGameField;
 import gui.GameVisual.Sapper.Factories.RectangleModelFactory;
@@ -43,14 +44,7 @@ public class MainApplicationFrame extends JFrame {
     setContentPane(desktopPane);
 
 
-    sapperWindows = new SapperWindows(
-            new RectangleSapperVisualizer(
-                    RectangleModelFactory.createModel(
-                            new RectangleGameField(9, 9),
-                            GAME_LEVEL.EASY,
-                            new Random())
-            )
-    );
+    sapperWindows = new SapperWindows(new RectangleSapperVisualizer());
     sapperWindows.setField(new RectangleGameField(9, 9));
     sapperWindows.setLevel(GAME_LEVEL.EASY);
     desktopPane.add(sapperWindows);
@@ -248,7 +242,7 @@ public class MainApplicationFrame extends JFrame {
       toric.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_T, ActionEvent.SHIFT_MASK));
       toric.addActionListener((actionEvent -> {
         sapperWindows.resetModel(
-                RectangleModelFactory.createToricModel(
+                RectangleToricalModelFactory.createModel(
                         new RectangleToricGameField(9, 9),
                         sapperWindows.getLevel(),
                         new Random()
@@ -296,7 +290,7 @@ public class MainApplicationFrame extends JFrame {
           );
         else
           sapperWindows.resetModel(
-                  RectangleModelFactory.createToricModel(
+                  RectangleToricalModelFactory.createModel(
                           new RectangleToricGameField(9,9),
                           GAME_LEVEL.TEST,
                           new Random(2)
@@ -319,7 +313,7 @@ public class MainApplicationFrame extends JFrame {
           );
         else
           sapperWindows.resetModel(
-                  RectangleModelFactory.createToricModel(
+                  RectangleToricalModelFactory.createModel(
                           new RectangleToricGameField(9,9),
                           GAME_LEVEL.EASY,
                           new Random()
@@ -341,7 +335,7 @@ public class MainApplicationFrame extends JFrame {
           );
         else
           sapperWindows.resetModel(
-                  RectangleModelFactory.createToricModel(
+                  RectangleToricalModelFactory.createModel(
                           new RectangleToricGameField(9,9),
                           GAME_LEVEL.MEDIUM,
                           new Random()
@@ -361,7 +355,7 @@ public class MainApplicationFrame extends JFrame {
           );
         else
           sapperWindows.resetModel(
-                  RectangleModelFactory.createToricModel(
+                  RectangleToricalModelFactory.createModel(
                           new RectangleToricGameField(9,9),
                           GAME_LEVEL.HARD,
                           new Random()
